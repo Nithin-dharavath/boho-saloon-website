@@ -1,29 +1,29 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Montserrat:wght@200;300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap');
 
 :root {
-  --ivory: #FAF8F5;
-  --ivory-dark: #F5F0EB;
-  --champagne: #F5E6D3;
-  --champagne-light: #F8EDE0;
-  --warm-beige: #E8DDD0;
-  --taupe: #D4C5B2;
-  --taupe-light: #E0D4C4;
-  --warm-grey: #B8A99A;
-  --soft-greige: #A09080;
-  --deep-warm: #8B7D6B;
+  --ivory: #FFFFFF;
+  --ivory-dark: #FAFAF8;
+  --champagne: #F8F2EC;
+  --champagne-light: #FBF7F3;
+  --warm-beige: #EDE8E3;
+  --taupe: #D4CBC3;
+  --taupe-light: #E0D9D2;
+  --warm-grey: #9E8E80;
+  --soft-greige: #7D6F62;
+  --deep-warm: #6B5E52;
   --dark-neutral: #2C2826;
   --near-black: #1A1817;
   --pure-white: #FFFFFF;
   --gold: #C9A96E;
   --gold-light: #D4B88A;
-  --rose-gold: #E8C4B8;
-  --shadow-light: rgba(44, 40, 38, 0.06);
-  --shadow-med: rgba(44, 40, 38, 0.12);
-  --shadow-glass: rgba(44, 40, 38, 0.08);
-  --glass-bg: rgba(250, 248, 245, 0.6);
-  --glass-bg-strong: rgba(250, 248, 245, 0.85);
-  --glass-border: rgba(255, 255, 255, 0.5);
-  --glass-border-strong: rgba(255, 255, 255, 0.8);
+  --rose-gold: #E2BCB0;
+  --shadow-light: rgba(44, 40, 38, 0.04);
+  --shadow-med: rgba(44, 40, 38, 0.08);
+  --shadow-glass: rgba(44, 40, 38, 0.05);
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-bg-strong: rgba(255, 255, 255, 0.92);
+  --glass-border: rgba(255, 255, 255, 0.6);
+  --glass-border-strong: rgba(255, 255, 255, 0.85);
   --transition-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --transition-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
   --transition-glass: cubic-bezier(0.22, 1, 0.36, 1);
@@ -41,18 +41,18 @@ html {
 }
 
 body {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   background: var(--ivory);
   color: var(--dark-neutral);
   overflow-x: hidden;
   line-height: 1.7;
-  font-weight: 300;
+  font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Playfair Display', serif;
   font-weight: 400;
   line-height: 1.2;
   letter-spacing: 0.02em;
@@ -73,47 +73,56 @@ h1, h2, h3, h4, h5, h6 {
   overflow: hidden;
 }
 
+.liquid-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.6) 0%, transparent 60%),
+              radial-gradient(ellipse at 70% 80%, rgba(255,255,255,0.4) 0%, transparent 50%);
+  pointer-events: none;
+}
+
 .liquid-bg .orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.4;
-  animation: orbFloat 20s ease-in-out infinite;
+  filter: blur(100px);
+  opacity: 0.25;
+  animation: orbFloat 25s ease-in-out infinite;
 }
 
 .liquid-bg .orb:nth-child(1) {
-  width: 600px;
-  height: 600px;
+  width: 700px;
+  height: 700px;
   background: radial-gradient(circle, var(--champagne), transparent);
-  top: -10%;
+  top: -15%;
   left: -5%;
   animation-delay: 0s;
 }
 
 .liquid-bg .orb:nth-child(2) {
-  width: 500px;
-  height: 500px;
+  width: 550px;
+  height: 550px;
   background: radial-gradient(circle, var(--rose-gold), transparent);
-  bottom: -5%;
+  bottom: -10%;
   right: -5%;
   animation-delay: -7s;
 }
 
 .liquid-bg .orb:nth-child(3) {
-  width: 400px;
-  height: 400px;
+  width: 450px;
+  height: 450px;
   background: radial-gradient(circle, var(--warm-beige), transparent);
   top: 40%;
-  left: 50%;
+  left: 55%;
   animation-delay: -14s;
 }
 
 .liquid-bg .orb:nth-child(4) {
-  width: 350px;
-  height: 350px;
-  background: radial-gradient(circle, var(--taupe-light), transparent);
-  top: 60%;
-  left: 10%;
+  width: 380px;
+  height: 380px;
+  background: radial-gradient(circle, var(--pure-white), transparent);
+  top: 55%;
+  left: 8%;
   animation-delay: -5s;
 }
 
@@ -157,7 +166,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .section-subtitle {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.3em;
@@ -184,7 +193,7 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0 auto;
   color: var(--soft-greige);
   font-size: 1rem;
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.8;
 }
 
@@ -227,12 +236,12 @@ h1, h2, h3, h4, h5, h6 {
   justify-content: center;
   font-size: 1.2rem;
   color: var(--pure-white);
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Playfair Display', serif;
   font-weight: 600;
 }
 
 .navbar-brand .brand-text {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Playfair Display', serif;
   font-size: 1.5rem;
   font-weight: 500;
   color: var(--dark-neutral);
@@ -250,7 +259,7 @@ h1, h2, h3, h4, h5, h6 {
   text-decoration: none;
   color: var(--soft-greige);
   font-size: 0.8rem;
-  font-weight: 400;
+  font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   transition: color 0.4s var(--transition-smooth);
@@ -347,6 +356,15 @@ h1, h2, h3, h4, h5, h6 {
   justify-content: center;
   padding: 120px 24px 80px;
   overflow: hidden;
+  background: url('/static/images/salon-hero.jpg') center/cover no-repeat;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 1;
 }
 
 .hero-content {
@@ -373,7 +391,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .hero-title {
   font-size: clamp(3.5rem, 10vw, 7rem);
-  color: var(--dark-neutral);
+  color: var(--pure-white);
   margin-bottom: 8px;
   animation: fadeInUp 1s var(--transition-smooth) 0.2s forwards;
   opacity: 0;
@@ -387,11 +405,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .hero-subtitle {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Playfair Display', serif;
   font-size: clamp(1.2rem, 2.5vw, 1.8rem);
   font-weight: 300;
   font-style: italic;
-  color: var(--soft-greige);
+  color: var(--ivory-dark);
   margin-bottom: 48px;
   animation: fadeInUp 1s var(--transition-smooth) 0.4s forwards;
   opacity: 0;
@@ -413,7 +431,7 @@ h1, h2, h3, h4, h5, h6 {
   gap: 10px;
   padding: 16px 40px;
   border-radius: 50px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.8rem;
   font-weight: 500;
   letter-spacing: 0.08em;
@@ -460,10 +478,11 @@ h1, h2, h3, h4, h5, h6 {
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  color: var(--soft-greige);
+  color: var(--ivory-dark);
   font-size: 0.65rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
+  z-index: 2;
   animation: fadeInUp 1s var(--transition-smooth) 1s forwards;
   opacity: 0;
 }
@@ -471,7 +490,7 @@ h1, h2, h3, h4, h5, h6 {
 .scroll-indicator {
   width: 1px;
   height: 40px;
-  background: linear-gradient(180deg, var(--soft-greige), transparent);
+  background: linear-gradient(180deg, var(--ivory-dark), transparent);
   animation: scrollPulse 2s ease-in-out infinite;
 }
 
@@ -555,11 +574,11 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--soft-greige);
   font-size: 0.9rem;
   line-height: 1.8;
-  font-weight: 300;
+  font-weight: 400;
 }
 
 .card-price {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Playfair Display', serif;
   font-size: 1.8rem;
   color: var(--gold);
   margin-top: 20px;
@@ -578,17 +597,10 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 24px;
   overflow: hidden;
   aspect-ratio: 3/4;
-  background: linear-gradient(135deg, var(--warm-beige), var(--champagne));
+  background: url('/static/images/salon-about.jpg') center/cover no-repeat;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.about-image-placeholder {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 3rem;
-  color: var(--taupe);
-  opacity: 0.5;
 }
 
 .about-image .glass-overlay {
@@ -605,7 +617,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .about-image .glass-overlay p {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Playfair Display', serif;
   font-style: italic;
   font-size: 1.1rem;
   color: var(--dark-neutral);
@@ -619,7 +631,7 @@ h1, h2, h3, h4, h5, h6 {
 .about-content p {
   color: var(--soft-greige);
   margin-bottom: 20px;
-  font-weight: 300;
+  font-weight: 400;
 }
 
 .about-stats {
@@ -634,7 +646,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .stat-number {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Playfair Display', serif;
   font-size: 2.5rem;
   color: var(--gold);
 }
@@ -662,7 +674,7 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid var(--taupe);
   background: transparent;
   color: var(--soft-greige);
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.75rem;
   font-weight: 400;
   letter-spacing: 0.06em;
@@ -710,7 +722,7 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Playfair Display', serif;
   font-size: 1.5rem;
   color: var(--taupe);
   flex-direction: column;
@@ -738,7 +750,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .gallery-item .glass-overlay span {
   color: var(--pure-white);
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Playfair Display', serif;
   font-size: 1.2rem;
   transform: translateY(10px);
   transition: all 0.5s var(--transition-glass);
@@ -778,7 +790,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .testimonial-text {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Playfair Display', serif;
   font-size: 1.2rem;
   font-style: italic;
   line-height: 1.8;
@@ -800,7 +812,7 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Playfair Display', serif;
   font-weight: 600;
   color: var(--soft-greige);
 }
@@ -835,7 +847,7 @@ h1, h2, h3, h4, h5, h6 {
 .contact-info p {
   color: var(--soft-greige);
   margin-bottom: 32px;
-  font-weight: 300;
+  font-weight: 400;
 }
 
 .contact-detail {
@@ -865,7 +877,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .contact-detail .value {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Playfair Display', serif;
   font-size: 1.1rem;
   color: var(--dark-neutral);
 }
@@ -895,7 +907,7 @@ h1, h2, h3, h4, h5, h6 {
   background: rgba(255,255,255,0.5);
   border: 1px solid var(--taupe);
   border-radius: 12px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
   color: var(--dark-neutral);
   transition: all 0.4s var(--transition-smooth);
@@ -932,14 +944,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .footer-brand {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Playfair Display', serif;
   font-size: 1.8rem;
   margin-bottom: 16px;
 }
 
 .footer-desc {
   color: var(--warm-grey);
-  font-weight: 300;
+  font-weight: 400;
   font-size: 0.9rem;
   line-height: 1.8;
   max-width: 320px;
@@ -963,7 +975,7 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--warm-grey);
   text-decoration: none;
   font-size: 0.9rem;
-  font-weight: 300;
+  font-weight: 400;
   transition: color 0.3s var(--transition-smooth);
 }
 
