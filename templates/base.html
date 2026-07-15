@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{{ seo.title if seo else "Boho Bloom Luxury Salon" }}{% endblock %}</title>
+
+  {% if seo %}
+  <meta name="description" content="{{ seo.description }}">
+  <meta name="keywords" content="{{ seo.keywords }}">
+  <meta name="robots" content="{{ seo.robots }}">
+  <link rel="canonical" href="{{ seo.canonical }}">
+
+  <meta property="og:title" content="{{ seo.title }}">
+  <meta property="og:description" content="{{ seo.description }}">
+  <meta property="og:image" content="{{ seo.og_image }}">
+  <meta property="og:url" content="{{ seo.canonical }}">
+  <meta property="og:type" content="{{ seo.og_type }}">
+  <meta property="og:site_name" content="{{ seo.site_name }}">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ seo.title }}">
+  <meta name="twitter:description" content="{{ seo.description }}">
+  <meta name="twitter:image" content="{{ seo.og_image }}">
+
+  <meta name="geo.region" content="IN-TS">
+  <meta name="geo.placename" content="Hanamkonda, Warangal, Telangana">
+  <meta name="geo.position" content="18.0079;79.5767">
+  <meta name="ICBM" content="18.0079, 79.5767">
+  {% endif %}
+
+  {% if GOOGLE_SITE_VERIFICATION %}
+  <meta name="google-site-verification" content="{{ GOOGLE_SITE_VERIFICATION }}">
+  {% endif %}
+
+  {% block extra_head %}{% endblock %}
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  {% block content %}{% endblock %}
+  {% block scripts %}{% endblock %}
+</body>
+</html>

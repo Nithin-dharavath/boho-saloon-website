@@ -33,6 +33,17 @@ def init_db():
 
         CREATE INDEX IF NOT EXISTS idx_otp_lookup
             ON otp_codes(email, used, expires_at);
+
+        CREATE TABLE IF NOT EXISTS automation_logs (
+            id              INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id         INTEGER REFERENCES users(id),
+            email_type      TEXT NOT NULL,
+            recipient       TEXT NOT NULL,
+            sent_at         TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            status          TEXT NOT NULL DEFAULT 'sent',
+            error           TEXT,
+            idempotency_key TEXT UNIQUE NOT NULL
+        );
     """)
     conn.commit()
     conn.close()

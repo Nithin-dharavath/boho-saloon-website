@@ -1,113 +1,110 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Complete Your Profile — Boho Bloom Luxury Salon</title>
-  <link rel="stylesheet" href="/static/css/style.css">
-</head>
-<body>
-  <div class="page-glow"></div>
-  <div class="auth-shell">
-    <a href="/" class="auth-logo">
-      <span class="brand-mark">B</span>
-      <span class="brand-copy">
-        <strong>Boho Bloom</strong>
-        <span>Luxury Salon</span>
-      </span>
-    </a>
+{% extends "base.html" %}
 
-    <div class="auth-card">
-      <p class="eyebrow">Almost done</p>
-      <h2>Complete your profile</h2>
-      <p class="auth-desc">Tell us a little about yourself so we can personalise your experience.</p>
+{% block title %}{{ seo.title }}{% endblock %}
 
-      <form id="profile-form" autocomplete="off">
-        <label>
-          <span>Your Name</span>
-          <input
-            type="text"
-            id="name-input"
-            placeholder="e.g. Ananya Sharma"
-            required
-            autocomplete="name"
-          >
-        </label>
-        <label>
-          <span>Date of Birth</span>
-          <input
-            type="date"
-            id="dob-input"
-            required
-            max="9999-12-31"
-          >
-        </label>
-        <div class="auth-error" id="profile-error"></div>
-        <button type="submit" class="btn btn-dark" id="save-btn">
-          Save &amp; Continue
-        </button>
-      </form>
-    </div>
+{% block content %}
+<div class="page-glow"></div>
+<div class="auth-shell">
+  <a href="/" class="auth-logo">
+    <span class="brand-mark">B</span>
+    <span class="brand-copy">
+      <strong>Boho Bloom</strong>
+      <span>Luxury Salon</span>
+    </span>
+  </a>
+
+  <div class="auth-card">
+    <p class="eyebrow">Almost done</p>
+    <h2>Complete your profile</h2>
+    <p class="auth-desc">Tell us a little about yourself so we can personalise your experience.</p>
+
+    <form id="profile-form" autocomplete="off">
+      <label>
+        <span>Your Name</span>
+        <input
+          type="text"
+          id="name-input"
+          placeholder="e.g. Ananya Sharma"
+          required
+          autocomplete="name"
+        >
+      </label>
+      <label>
+        <span>Date of Birth</span>
+        <input
+          type="date"
+          id="dob-input"
+          required
+          max="9999-12-31"
+        >
+      </label>
+      <div class="auth-error" id="profile-error"></div>
+      <button type="submit" class="btn btn-dark" id="save-btn">
+        Save &amp; Continue
+      </button>
+    </form>
   </div>
+</div>
+{% endblock %}
 
-  <script>
-    const form = document.getElementById('profile-form');
-    const nameInput = document.getElementById('name-input');
-    const dobInput = document.getElementById('dob-input');
-    const errorEl = document.getElementById('profile-error');
-    const saveBtn = document.getElementById('save-btn');
+{% block scripts %}
+<script>
+  const form = document.getElementById('profile-form');
+  const nameInput = document.getElementById('name-input');
+  const dobInput = document.getElementById('dob-input');
+  const errorEl = document.getElementById('profile-error');
+  const saveBtn = document.getElementById('save-btn');
 
-    const today = new Date();
-    const maxDate = today.toISOString().split('T')[0];
-    dobInput.setAttribute('max', maxDate);
+  const today = new Date();
+  const maxDate = today.toISOString().split('T')[0];
+  dobInput.setAttribute('max', maxDate);
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      errorEl.textContent = '';
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorEl.textContent = '';
 
-      const name = nameInput.value.trim();
-      const date_of_birth = dobInput.value;
+    const name = nameInput.value.trim();
+    const date_of_birth = dobInput.value;
 
-      if (!name) {
-        errorEl.textContent = 'Please enter your name.';
+    if (!name) {
+      errorEl.textContent = 'Please enter your name.';
+      return;
+    }
+    if (!date_of_birth) {
+      errorEl.textContent = 'Please select your date of birth.';
+      return;
+    }
+
+    saveBtn.disabled = true;
+    saveBtn.textContent = 'Saving...';
+
+    try {
+      const res = await fetch('/auth/profile-setup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, date_of_birth }),
+      });
+
+      if (!res.ok && res.status === 401) {
+        window.location.href = '/login';
         return;
       }
-      if (!date_of_birth) {
-        errorEl.textContent = 'Please select your date of birth.';
-        return;
-      }
 
-      saveBtn.disabled = true;
-      saveBtn.textContent = 'Saving...';
+      const data = await res.json();
 
-      try {
-        const res = await fetch('/auth/profile-setup', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, date_of_birth }),
-        });
-
-        if (!res.ok && res.status === 401) {
-          window.location.href = '/login';
-          return;
-        }
-
-        const data = await res.json();
-
-        if (!data.ok) {
-          errorEl.textContent = data.error || 'Something went wrong.';
-          saveBtn.disabled = false;
-          saveBtn.textContent = 'Save & Continue';
-          return;
-        }
-
-        window.location.href = '/';
-      } catch (err) {
-        errorEl.textContent = 'Network error. Please try again.';
+      if (!data.ok) {
+        errorEl.textContent = data.error || 'Something went wrong.';
         saveBtn.disabled = false;
         saveBtn.textContent = 'Save & Continue';
+        return;
       }
-    });
-  </script>
-</body>
-</html>
+
+      window.location.href = '/';
+    } catch (err) {
+      errorEl.textContent = 'Network error. Please try again.';
+      saveBtn.disabled = false;
+      saveBtn.textContent = 'Save & Continue';
+    }
+  });
+</script>
+{% endblock %}

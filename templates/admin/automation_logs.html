@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}{{ seo.title }}{% endblock %}
+
+{% block content %}
+<div style="max-width:960px;margin:40px auto;padding:0 20px;">
+  <h1 style="color:#4b2f1f;">Automation Logs</h1>
+  <p style="color:#7b5738;">Email automation send history</p>
+
+  <form method="GET" style="margin:20px 0;">
+    <label style="color:#4b2f1f;margin-right:12px;">
+      Filter by type:
+      <select name="email_type" style="padding:6px 12px;border:1px solid #ead8c3;border-radius:8px;">
+        <option value="">All</option>
+        <option value="birthday_offer" {% if filter_type == 'birthday_offer' %}selected{% endif %}>Birthday Offer</option>
+      </select>
+    </label>
+    <button type="submit" style="padding:6px 16px;background:#4b2f1f;color:#fff;border:none;border-radius:8px;cursor:pointer;">Filter</button>
+  </form>
+
+  <table style="width:100%;border-collapse:collapse;">
+    <thead>
+      <tr style="background:#f8f1e8;">
+        <th style="padding:12px;text-align:left;color:#4b2f1f;border-bottom:2px solid #ead8c3;">Date</th>
+        <th style="padding:12px;text-align:left;color:#4b2f1f;border-bottom:2px solid #ead8c3;">Recipient</th>
+        <th style="padding:12px;text-align:left;color:#4b2f1f;border-bottom:2px solid #ead8c3;">Type</th>
+        <th style="padding:12px;text-align:left;color:#4b2f1f;border-bottom:2px solid #ead8c3;">Status</th>
+        <th style="padding:12px;text-align:left;color:#4b2f1f;border-bottom:2px solid #ead8c3;">Error</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for log in logs %}
+      <tr style="border-bottom:1px solid #ead8c3;">
+        <td style="padding:10px;color:#4b2f1f;">{{ log.sent_at }}</td>
+        <td style="padding:10px;color:#7b5738;">{{ log.recipient }}</td>
+        <td style="padding:10px;color:#7b5738;">{{ log.email_type }}</td>
+        <td style="padding:10px;">
+          {% if log.status == 'sent' %}
+            <span style="color:#2e7d32;">sent</span>
+          {% else %}
+            <span style="color:#c62828;">{{ log.status }}</span>
+          {% endif %}
+        </td>
+        <td style="padding:10px;color:#b48860;">{{ log.error or '' }}</td>
+      </tr>
+      {% endfor %}
+      {% if not logs %}
+      <tr>
+        <td colspan="5" style="padding:20px;text-align:center;color:#b48860;">No logs yet.</td>
+      </tr>
+      {% endif %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

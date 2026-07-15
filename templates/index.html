@@ -1,49 +1,92 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Boho Bloom Luxury Salon | Hanamkonda, Warangal</title>
-  <meta name="description" content="Boho Bloom Luxury Salon is a premium unisex salon in Hanamkonda, Warangal, offering hair care, nails, and makeup services. Open daily 9:00 am to 9:00 pm.">
-  <link rel="canonical" href="https://bohobloomsalon.com/">
-  <link rel="stylesheet" href="/static/css/style.css">
+{% extends "base.html" %}
 
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "BeautySalon",
-    "name": "Boho Bloom Luxury Salon",
-    "image": "https://bohobloomsalon.com/static/images/salon-hero.jpg",
-    "url": "https://bohobloomsalon.com/",
-    "telephone": "+91 77956 93862",
-    "priceRange": "$$",
-    "description": "Boho Bloom Luxury Salon is a premium unisex salon in Hanamkonda, Warangal, offering hair care, nails, and makeup services. Open daily 9:00 am to 9:00 pm.",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "REC to Darga Road, near REC Petrol Pump, beside Victoria Bar, NIT Campus",
-      "addressLocality": "Hanamkonda",
-      "addressRegion": "Warangal",
-      "addressCountry": "IN"
-    },
-    "openingHoursSpecification": {
+{% block title %}{{ seo.title }}{% endblock %}
+
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BeautySalon",
+  "name": "Boho Bloom Luxury Salon",
+  "image": "https://bohobloomsalon.com/static/images/salon-hero.jpg",
+  "url": "https://bohobloomsalon.com/",
+  "telephone": "+91 77956 93862",
+  "priceRange": "$$",
+  "description": "Boho Bloom Luxury Salon is a premium unisex salon in Hanamkonda, Warangal, offering hair care, nails, and makeup services. Open daily 9:00 am to 9:00 pm.",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "REC to Darga Road, near REC Petrol Pump, beside Victoria Bar, NIT Campus",
+    "addressLocality": "Hanamkonda",
+    "addressRegion": "Warangal",
+    "addressCountry": "IN"
+  },
+  "openingHoursSpecification": [
+    {
       "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+      "dayOfWeek": "Monday",
       "opens": "09:00",
       "closes": "21:00"
     },
-    "founder": {
-      "@type": "Person",
-      "name": "Boho Bloom Luxury Salon"
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Tuesday",
+      "opens": "09:00",
+      "closes": "21:00"
     },
-    "foundingDate": "2024-11"
-  }
-  </script>
-</head>
-<body>
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Wednesday",
+      "opens": "09:00",
+      "closes": "21:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Thursday",
+      "opens": "09:00",
+      "closes": "21:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Friday",
+      "opens": "09:00",
+      "closes": "21:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Saturday",
+      "opens": "09:00",
+      "closes": "21:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Sunday",
+      "opens": "09:00",
+      "closes": "21:00"
+    }
+  ],
+  "founder": {
+    "@type": "Person",
+    "name": "Boho Bloom Luxury Salon"
+  },
+  "foundingDate": "2024-11",
+  "makesOffer": [
+    {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Hair Care"}},
+    {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Nail Care"}},
+    {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Makeup"}},
+    {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Bridal Makeup"}}
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
   <div class="page-glow"></div>
 
   <section class="hero-shell" id="home">
-    <div class="hero-backdrop"></div>
+    <div class="hero-backdrop">
+      <img src="/static/images/salon-hero.jpg" alt="Boho Bloom Luxury Salon premium salon interior in Hanamkonda, Warangal" fetchpriority="high">
+      <div class="hero-backdrop-overlay"></div>
+    </div>
     <div class="hero-panel">
       <nav class="navbar" role="navigation" aria-label="Main navigation">
         <a href="#home" class="navbar-brand">
@@ -265,6 +308,8 @@
     <span>Luxury beauty rituals in Hanamkonda, Warangal.</span>
   </footer>
 
-  <script src="/static/js/script.js"></script>
-</body>
-</html>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/script.js"></script>
+{% endblock %}

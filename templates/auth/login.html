@@ -1,205 +1,202 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign In — Boho Bloom Luxury Salon</title>
-  <link rel="stylesheet" href="/static/css/style.css">
-</head>
-<body>
-  <div class="page-glow"></div>
-  <div class="auth-shell">
-    <a href="/" class="auth-logo">
-      <span class="brand-mark">B</span>
-      <span class="brand-copy">
-        <strong>Boho Bloom</strong>
-        <span>Luxury Salon</span>
-      </span>
-    </a>
+{% extends "base.html" %}
 
-    <div class="auth-card" id="auth-card">
-      <div class="auth-step" id="step-email">
-        <p class="eyebrow">Welcome</p>
-        <h2>Sign in to your account</h2>
-        <p class="auth-desc">Enter your email address and we'll send you a one-time code.</p>
+{% block title %}{{ seo.title }}{% endblock %}
 
-        <form id="email-form" autocomplete="off">
-          <label>
-            <span>Email Address</span>
-            <input
-              type="email"
-              id="email-input"
-              placeholder="you@example.com"
-              required
-              autocomplete="email"
-              inputmode="email"
-            >
-          </label>
-          <div class="auth-error" id="email-error"></div>
-          <button type="submit" class="btn btn-dark" id="send-code-btn">
-            Send Code
-          </button>
-        </form>
-      </div>
+{% block content %}
+<div class="page-glow"></div>
+<div class="auth-shell">
+  <a href="/" class="auth-logo">
+    <span class="brand-mark">B</span>
+    <span class="brand-copy">
+      <strong>Boho Bloom</strong>
+      <span>Luxury Salon</span>
+    </span>
+  </a>
 
-      <div class="auth-step hidden" id="step-otp">
-        <p class="eyebrow">Verify</p>
-        <h2>Check your email</h2>
-        <p class="auth-desc">
-          We sent a 6-digit code to <strong id="display-email"></strong>.
-        </p>
+  <div class="auth-card" id="auth-card">
+    <div class="auth-step" id="step-email">
+      <p class="eyebrow">Welcome</p>
+      <h2>Sign in to your account</h2>
+      <p class="auth-desc">Enter your email address and we'll send you a one-time code.</p>
 
-        <form id="otp-form" autocomplete="off">
-          <label>
-            <span>One-Time Code</span>
-            <input
-              type="text"
-              id="code-input"
-              placeholder="000000"
-              required
-              maxlength="6"
-              inputmode="numeric"
-              pattern="[0-9]{6}"
-              autocomplete="one-time-code"
-            >
-          </label>
-          <div class="auth-error" id="otp-error"></div>
-          <button type="submit" class="btn btn-dark" id="verify-btn">
-            Verify &amp; Sign In
-          </button>
-        </form>
+      <form id="email-form" autocomplete="off">
+        <label>
+          <span>Email Address</span>
+          <input
+            type="email"
+            id="email-input"
+            placeholder="you@example.com"
+            required
+            autocomplete="email"
+            inputmode="email"
+          >
+        </label>
+        <div class="auth-error" id="email-error"></div>
+        <button type="submit" class="btn btn-dark" id="send-code-btn">
+          Send Code
+        </button>
+      </form>
+    </div>
 
-        <p class="auth-back">
-          <a href="#" id="back-to-email">&larr; Use a different email</a>
-        </p>
-      </div>
+    <div class="auth-step hidden" id="step-otp">
+      <p class="eyebrow">Verify</p>
+      <h2>Check your email</h2>
+      <p class="auth-desc">
+        We sent a 6-digit code to <strong id="display-email"></strong>.
+      </p>
 
-      <div class="auth-step hidden" id="step-success">
-        <div class="auth-success-icon">&#10003;</div>
-        <h2>Signed in!</h2>
-        <p class="auth-desc">Redirecting you...</p>
-      </div>
+      <form id="otp-form" autocomplete="off">
+        <label>
+          <span>One-Time Code</span>
+          <input
+            type="text"
+            id="code-input"
+            placeholder="000000"
+            required
+            maxlength="6"
+            inputmode="numeric"
+            pattern="[0-9]{6}"
+            autocomplete="one-time-code"
+          >
+        </label>
+        <div class="auth-error" id="otp-error"></div>
+        <button type="submit" class="btn btn-dark" id="verify-btn">
+          Verify &amp; Sign In
+        </button>
+      </form>
+
+      <p class="auth-back">
+        <a href="#" id="back-to-email">&larr; Use a different email</a>
+      </p>
+    </div>
+
+    <div class="auth-step hidden" id="step-success">
+      <div class="auth-success-icon">&#10003;</div>
+      <h2>Signed in!</h2>
+      <p class="auth-desc">Redirecting you...</p>
     </div>
   </div>
+</div>
+{% endblock %}
 
-  <script>
-    const emailStep = document.getElementById('step-email');
-    const otpStep = document.getElementById('step-otp');
-    const successStep = document.getElementById('step-success');
-    const emailForm = document.getElementById('email-form');
-    const otpForm = document.getElementById('otp-form');
-    const emailInput = document.getElementById('email-input');
-    const codeInput = document.getElementById('code-input');
-    const displayEmail = document.getElementById('display-email');
-    const emailError = document.getElementById('email-error');
-    const otpError = document.getElementById('otp-error');
-    const sendBtn = document.getElementById('send-code-btn');
-    const verifyBtn = document.getElementById('verify-btn');
-    const backLink = document.getElementById('back-to-email');
+{% block scripts %}
+<script>
+  const emailStep = document.getElementById('step-email');
+  const otpStep = document.getElementById('step-otp');
+  const successStep = document.getElementById('step-success');
+  const emailForm = document.getElementById('email-form');
+  const otpForm = document.getElementById('otp-form');
+  const emailInput = document.getElementById('email-input');
+  const codeInput = document.getElementById('code-input');
+  const displayEmail = document.getElementById('display-email');
+  const emailError = document.getElementById('email-error');
+  const otpError = document.getElementById('otp-error');
+  const sendBtn = document.getElementById('send-code-btn');
+  const verifyBtn = document.getElementById('verify-btn');
+  const backLink = document.getElementById('back-to-email');
 
-    let currentEmail = '';
+  let currentEmail = '';
 
-    function showStep(show, hide) {
-      show.classList.remove('hidden');
-      hide.classList.add('hidden');
+  function showStep(show, hide) {
+    show.classList.remove('hidden');
+    hide.classList.add('hidden');
+  }
+
+  emailForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    emailError.textContent = '';
+    const email = emailInput.value.trim().toLowerCase();
+
+    if (!email || !email.includes('@')) {
+      emailError.textContent = 'Please enter a valid email address.';
+      return;
     }
 
-    emailForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      emailError.textContent = '';
-      const email = emailInput.value.trim().toLowerCase();
+    sendBtn.disabled = true;
+    sendBtn.textContent = 'Sending...';
 
-      if (!email || !email.includes('@')) {
-        emailError.textContent = 'Please enter a valid email address.';
-        return;
-      }
+    try {
+      const res = await fetch('/auth/request-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
 
-      sendBtn.disabled = true;
-      sendBtn.textContent = 'Sending...';
-
-      try {
-        const res = await fetch('/auth/request-otp', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email }),
-        });
-        const data = await res.json();
-
-        if (!data.ok) {
-          emailError.textContent = data.error || 'Something went wrong.';
-          sendBtn.disabled = false;
-          sendBtn.textContent = 'Send Code';
-          return;
-        }
-
-        currentEmail = email;
-        displayEmail.textContent = email;
-        codeInput.value = '';
-        otpError.textContent = '';
-        showStep(otpStep, emailStep);
-      } catch (err) {
-        emailError.textContent = 'Network error. Please try again.';
+      if (!data.ok) {
+        emailError.textContent = data.error || 'Something went wrong.';
         sendBtn.disabled = false;
         sendBtn.textContent = 'Send Code';
-      }
-    });
-
-    otpForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      otpError.textContent = '';
-      const code = codeInput.value.trim();
-
-      if (!code || code.length !== 6 || !/^\d{6}$/.test(code)) {
-        otpError.textContent = 'Please enter the full 6-digit code.';
         return;
       }
 
-      verifyBtn.disabled = true;
-      verifyBtn.textContent = 'Verifying...';
-
-      try {
-        const res = await fetch('/auth/verify-otp', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: currentEmail, code }),
-        });
-        const data = await res.json();
-
-        if (!data.ok) {
-          otpError.textContent = data.error || 'Invalid code.';
-          verifyBtn.disabled = false;
-          verifyBtn.textContent = 'Verify & Sign In';
-          codeInput.value = '';
-          codeInput.focus();
-          return;
-        }
-
-        showStep(successStep, otpStep);
-
-        setTimeout(() => {
-          if (data.needs_profile) {
-            window.location.href = '/profile/setup';
-          } else {
-            window.location.href = '/';
-          }
-        }, 800);
-      } catch (err) {
-        otpError.textContent = 'Network error. Please try again.';
-        verifyBtn.disabled = false;
-        verifyBtn.textContent = 'Verify & Sign In';
-      }
-    });
-
-    backLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      showStep(emailStep, otpStep);
+      currentEmail = email;
+      displayEmail.textContent = email;
+      codeInput.value = '';
+      otpError.textContent = '';
+      showStep(otpStep, emailStep);
+    } catch (err) {
+      emailError.textContent = 'Network error. Please try again.';
       sendBtn.disabled = false;
       sendBtn.textContent = 'Send Code';
-    });
+    }
+  });
 
-    codeInput.addEventListener('input', () => {
-      codeInput.value = codeInput.value.replace(/\D/g, '').slice(0, 6);
-    });
-  </script>
-</body>
-</html>
+  otpForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    otpError.textContent = '';
+    const code = codeInput.value.trim();
+
+    if (!code || code.length !== 6 || !/^\d{6}$/.test(code)) {
+      otpError.textContent = 'Please enter the full 6-digit code.';
+      return;
+    }
+
+    verifyBtn.disabled = true;
+    verifyBtn.textContent = 'Verifying...';
+
+    try {
+      const res = await fetch('/auth/verify-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: currentEmail, code }),
+      });
+      const data = await res.json();
+
+      if (!data.ok) {
+        otpError.textContent = data.error || 'Invalid code.';
+        verifyBtn.disabled = false;
+        verifyBtn.textContent = 'Verify & Sign In';
+        codeInput.value = '';
+        codeInput.focus();
+        return;
+      }
+
+      showStep(successStep, otpStep);
+
+      setTimeout(() => {
+        if (data.needs_profile) {
+          window.location.href = '/profile/setup';
+        } else {
+          window.location.href = '/';
+        }
+      }, 800);
+    } catch (err) {
+      otpError.textContent = 'Network error. Please try again.';
+      verifyBtn.disabled = false;
+      verifyBtn.textContent = 'Verify & Sign In';
+    }
+  });
+
+  backLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    showStep(emailStep, otpStep);
+    sendBtn.disabled = false;
+    sendBtn.textContent = 'Send Code';
+  });
+
+  codeInput.addEventListener('input', () => {
+    codeInput.value = codeInput.value.replace(/\D/g, '').slice(0, 6);
+  });
+</script>
+{% endblock %}
