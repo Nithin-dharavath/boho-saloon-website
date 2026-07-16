@@ -95,3 +95,18 @@ TERMS_SEO = SEOMeta(
     canonical=f"{BASE_URL}/terms-conditions",
     robots="index, follow",
 )
+
+SERVICES_SEO = SEOMeta(
+    title="Services — Boho Bloom Luxury Salon | Hair, Beauty, Nails & Spa",
+    description=(
+        "Explore premium hair care, beauty, nail art, spa, and bridal services at Boho "
+        "Bloom Luxury Salon in Hanamkonda, Warangal. Also available: men's grooming and "
+        "combo offers."
+    ),
+    canonical=f"{BASE_URL}/services",
+    keywords=(
+        "salon services, hair care, hair color, highlights, balayage, keratin, "
+        "bridal makeup, manicure, pedicure, nail art, spa, facial, "
+        "men's grooming, beard trim, Hanamkonda, Warangal, salon combo offers"
+    ),
+)

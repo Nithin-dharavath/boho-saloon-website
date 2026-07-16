@@ -198,15 +198,24 @@ p {
 .hero-panel {
   position: relative;
   z-index: 1;
+  isolation: isolate;
   width: min(1180px, 100%);
   margin: 0 auto;
   padding: 28px 28px 44px;
   border-radius: 36px;
   min-height: calc(100vh - 44px);
-  background: linear-gradient(135deg, rgba(111, 72, 43, 0.36), rgba(255, 255, 255, 0.08));
-  backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.22);
   box-shadow: var(--shadow);
+}
+
+.hero-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(111, 72, 43, 0.36), rgba(255, 255, 255, 0.08));
+  backdrop-filter: blur(12px);
+  z-index: -1;
 }
 
 .navbar {
@@ -1239,5 +1248,369 @@ p {
     justify-content: center;
     padding-top: 12px;
     border-top: 1px solid var(--line);
+  }
+}
+
+/* ── Services Page ─────────────────────────────── */
+
+.services-hero {
+  position: relative;
+  min-height: 70vh;
+  padding: 22px;
+}
+
+.services-hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(135deg, rgba(40, 22, 15, 0.82), rgba(75, 47, 31, 0.72)),
+    url('/static/images/salon-hero.jpg') center / cover no-repeat;
+}
+
+.services-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(248, 241, 232, 0) 72%, #fbf7f2 100%);
+}
+
+.text-fade {
+  opacity: 0.7;
+}
+
+.services-hero-panel {
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  padding: 28px 28px 44px;
+  border-radius: 36px;
+  min-height: calc(70vh - 44px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: var(--shadow);
+}
+
+.services-hero-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(111, 72, 43, 0.3), rgba(255, 255, 255, 0.06));
+  backdrop-filter: blur(12px);
+  z-index: -1;
+}
+
+.services-hero-content {
+  color: var(--white);
+  max-width: 700px;
+  padding-top: 40px;
+}
+
+.services-hero-content .eyebrow {
+  color: rgba(255, 250, 245, 0.86);
+}
+
+.services-hero-content h1 {
+  font-size: clamp(3.6rem, 7vw, 6rem);
+  margin-bottom: 20px;
+  line-height: 0.92;
+}
+
+.services-hero-text {
+  font-size: 1.05rem;
+  color: rgba(255, 250, 245, 0.82);
+  max-width: 520px;
+  line-height: 1.7;
+}
+
+.services-hero-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 36px;
+}
+
+.feature-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 20px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  backdrop-filter: blur(4px);
+}
+
+.section-intro {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto 48px;
+}
+
+.section-intro .eyebrow {
+  justify-content: center;
+}
+
+.section-intro h2 {
+  font-size: clamp(2.6rem, 4.5vw, 4rem);
+  margin-bottom: 14px;
+}
+
+.section-intro p {
+  color: rgba(75, 47, 31, 0.72);
+  font-size: 0.95rem;
+}
+
+.services-section {
+  padding: 80px 0 40px;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.service-card {
+  padding: 28px 26px;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(75, 47, 31, 0.07);
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+}
+
+.service-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+}
+
+.service-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.service-card-header h3 {
+  font-size: 1.55rem;
+  color: var(--cocoa);
+}
+
+.service-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(180, 136, 96, 0.15);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--mocha);
+}
+
+.service-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.service-list li {
+  position: relative;
+  padding: 8px 0 8px 22px;
+  font-size: 0.92rem;
+  color: rgba(75, 47, 31, 0.78);
+  line-height: 1.5;
+}
+
+.service-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 16px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--tan);
+  border: 2px solid rgba(180, 136, 96, 0.25);
+}
+
+/* ── Combo Offers ──────────────────────────────── */
+
+.combo-section {
+  padding: 40px 0 60px;
+}
+
+.combo-group {
+  margin-top: 48px;
+}
+
+.combo-group-title {
+  font-size: 1.6rem;
+  color: var(--mocha);
+  margin-bottom: 22px;
+  padding-left: 4px;
+}
+
+.combo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+.combo-card {
+  padding: 26px 24px;
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(248, 241, 232, 0.8));
+  border: 1px solid rgba(75, 47, 31, 0.08);
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+}
+
+.combo-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+}
+
+.combo-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.combo-card-top h4 {
+  font-size: 1.3rem;
+  color: var(--cocoa);
+  line-height: 1.1;
+}
+
+.combo-price {
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-family: 'Cormorant Garamond', serif;
+  color: var(--mocha);
+  white-space: nowrap;
+}
+
+.combo-rupee {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.combo-services {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.combo-services li {
+  display: inline-flex;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  background: rgba(180, 136, 96, 0.1);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--mocha);
+  letter-spacing: 0.02em;
+}
+
+/* ── Services CTA ──────────────────────────────── */
+
+.services-cta-section {
+  padding: 20px 0 70px;
+}
+
+.services-cta-card {
+  padding: 50px 44px;
+  border-radius: var(--radius-xl);
+  background:
+    linear-gradient(135deg, rgba(212, 177, 142, 0.28), rgba(255, 255, 255, 0.7)),
+    var(--white);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.services-cta-copy {
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.services-cta-copy .eyebrow {
+  justify-content: center;
+}
+
+.services-cta-copy h2 {
+  font-size: clamp(2.4rem, 4vw, 3.8rem);
+  margin-bottom: 14px;
+}
+
+.services-cta-copy p {
+  color: rgba(75, 47, 31, 0.72);
+  font-size: 0.95rem;
+  margin-bottom: 28px;
+}
+
+.services-cta-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 1080px) {
+  .services-hero-panel {
+    min-height: auto;
+  }
+
+  .services-hero-content {
+    padding-top: 20px;
+  }
+
+  .services-grid,
+  .combo-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+}
+
+@media (max-width: 820px) {
+  .services-hero {
+    padding: 12px;
+    min-height: 60vh;
+  }
+
+  .services-hero-panel {
+    padding: 18px 16px 30px;
+    min-height: calc(60vh - 24px);
+  }
+
+  .services-hero-content h1 {
+    font-size: clamp(2.8rem, 10vw, 4.2rem);
+  }
+}
+
+@media (max-width: 560px) {
+  .services-grid,
+  .combo-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .services-cta-card {
+    padding: 32px 22px;
+  }
+
+  .combo-card-top {
+    flex-direction: column;
   }
 }

@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+
+{% block title %}{{ seo.title }}{% endblock %}
+
+{% block content %}
+<div class="page-glow"></div>
+
+<section class="services-hero">
+  <div class="services-hero-bg">
+    <div class="services-hero-overlay"></div>
+  </div>
+  <div class="services-hero-panel">
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+      <a href="/" class="navbar-brand">
+        <span class="brand-mark">
+          <img src="{{ url_for('static', path='images/boho-bloom-monogram.png') }}?v=3" alt="Boho Bloom monogram logo">
+        </span>
+        <span class="brand-copy">
+          <strong>Boho Bloom</strong>
+          <span>Luxury Salon</span>
+        </span>
+      </a>
+      <ul class="navbar-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/#about">About Us</a></li>
+        <li><a href="/services">Services</a></li>
+        <li><a href="/#contact" class="navbar-cta">Book Visit</a></li>
+        {% if user and user.id %}
+          <li><a href="/auth/me" class="navbar-user">{{ user.name or "Account" }}</a></li>
+        {% else %}
+          <li><a href="/login" class="navbar-signin">Sign In</a></li>
+        {% endif %}
+      </ul>
+      <button class="navbar-toggle" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </nav>
+
+    <div class="services-hero-content reveal">
+      <p class="eyebrow">Our expertise</p>
+      <h1>Luxury Services<br><span class="text-fade">Curated For You</span></h1>
+      <p class="services-hero-text">
+        From precision haircuts and radiant colour to bridal artistry and deep-relaxation spa rituals — every service at Boho Bloom is designed to make you feel exceptional.
+      </p>
+      <div class="services-hero-features">
+        {% for feature in services_data.salon_features %}
+        <span class="feature-pill">{{ feature }}</span>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="services-section section" id="women-services">
+  <div class="section-intro reveal">
+    <p class="eyebrow">For her</p>
+    <h2>Women's Services</h2>
+    <p>Discover a full spectrum of hair, beauty, nail, and bridal offerings shaped to your style.</p>
+  </div>
+  <div class="services-grid">
+    {% for key, category in services_data.services.women.items() %}
+    <article class="service-card reveal">
+      <div class="service-card-header">
+        <h3>{{ category.title }}</h3>
+        <span class="service-count">{{ category.services|length }}</span>
+      </div>
+      <ul class="service-list">
+        {% for service in category.services %}
+        <li>{{ service }}</li>
+        {% endfor %}
+      </ul>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="services-section section" id="men-services">
+  <div class="section-intro reveal">
+    <p class="eyebrow">For him</p>
+    <h2>Men's Grooming</h2>
+    <p>Sharp cuts, precise beard work, revitalising treatments — grooming that goes beyond the basics.</p>
+  </div>
+  <div class="services-grid">
+    {% for key, category in services_data.services.men.items() %}
+    <article class="service-card reveal">
+      <div class="service-card-header">
+        <h3>{{ category.title }}</h3>
+        <span class="service-count">{{ category.services|length }}</span>
+      </div>
+      <ul class="service-list">
+        {% for service in category.services %}
+        <li>{{ service }}</li>
+        {% endfor %}
+      </ul>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="combo-section section" id="combo-offers">
+  <div class="section-intro reveal">
+    <p class="eyebrow">Smart savings</p>
+    <h2>Combo Offers</h2>
+    <p>Curated packages that pair your favourite services at a beautiful price.</p>
+  </div>
+
+  <div class="combo-group reveal">
+    <h3 class="combo-group-title">Women's Combos</h3>
+    <div class="combo-grid">
+      {% for offer in services_data.combo_offers.women %}
+      <div class="combo-card">
+        <div class="combo-card-top">
+          <h4>{{ offer.name }}</h4>
+          <span class="combo-price"><span class="combo-rupee">&#8377;</span> {{ offer.price }}</span>
+        </div>
+        <ul class="combo-services">
+          {% for s in offer.services %}
+          <li>{{ s }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="combo-group reveal">
+    <h3 class="combo-group-title">Men's Combos</h3>
+    <div class="combo-grid">
+      {% for offer in services_data.combo_offers.men %}
+      <div class="combo-card">
+        <div class="combo-card-top">
+          <h4>{{ offer.name }}</h4>
+          <span class="combo-price"><span class="combo-rupee">&#8377;</span> {{ offer.price }}</span>
+        </div>
+        <ul class="combo-services">
+          {% for s in offer.services %}
+          <li>{{ s }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="services-cta-section section reveal">
+  <div class="services-cta-card">
+    <div class="services-cta-copy">
+      <p class="eyebrow">Ready to book?</p>
+      <h2>Let's Bring Your Look To Life</h2>
+      <p>Call us or walk in — we'll craft a service experience that's truly yours.</p>
+      <div class="services-cta-actions">
+        <a href="/#contact" class="btn btn-dark">Book Appointment</a>
+        <a href="tel:+917795693862" class="btn btn-outline">Call +91 77956 93862</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-left">
+    <p>Boho Bloom Luxury Salon</p>
+    <span>Luxury beauty rituals in Hanamkonda, Warangal.</span>
+  </div>
+  <div class="footer-links">
+    <a href="/privacy-policy">Privacy Policy</a>
+    <a href="/terms-conditions">Terms &amp; Conditions</a>
+  </div>
+</footer>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/script.js"></script>
+{% endblock %}
