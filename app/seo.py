@@ -75,3 +75,23 @@ ADMIN_LOGS_SEO = SEOMeta(
     description="",
     robots="noindex, nofollow",
 )
+
+PRIVACY_SEO = SEOMeta(
+    title="Privacy Policy — Boho Bloom Luxury Salon",
+    description=(
+        "Read the privacy policy of Boho Bloom Luxury Salon. Learn how we collect, "
+        "use, and protect your personal information."
+    ),
+    canonical=f"{BASE_URL}/privacy-policy",
+    robots="index, follow",
+)
+
+TERMS_SEO = SEOMeta(
+    title="Terms &amp; Conditions — Boho Bloom Luxury Salon",
+    description=(
+        "Review the terms and conditions of Boho Bloom Luxury Salon including "
+        "appointment policies, pricing, and liability information."
+    ),
+    canonical=f"{BASE_URL}/terms-conditions",
+    robots="index, follow",
+)

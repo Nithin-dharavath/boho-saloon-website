@@ -11,7 +11,7 @@ from app.auth import router as auth_router, get_current_user
 from app.automation import start_scheduler, stop_scheduler, check_birthday_offers
 from app.database import init_db, get_db
 from app.config import ADMIN_EMAILS, GOOGLE_SITE_VERIFICATION
-from app.seo import INDEX_SEO, LOGIN_SEO, PROFILE_SETUP_SEO, ADMIN_LOGS_SEO
+from app.seo import INDEX_SEO, LOGIN_SEO, PROFILE_SETUP_SEO, ADMIN_LOGS_SEO, PRIVACY_SEO, TERMS_SEO
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
@@ -46,6 +46,16 @@ async def sitemap():
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
+  <url>
+    <loc>https://bohobloomsalon.com/privacy-policy</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://bohobloomsalon.com/terms-conditions</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
 </urlset>
 """
 
@@ -68,6 +78,22 @@ async def index(request: Request):
     if GOOGLE_SITE_VERIFICATION:
         ctx["GOOGLE_SITE_VERIFICATION"] = GOOGLE_SITE_VERIFICATION
     return templates.TemplateResponse(request, "index.html", ctx)
+
+
+@app.get("/privacy-policy", response_class=HTMLResponse)
+async def privacy_policy(request: Request):
+    ctx = {**PRIVACY_SEO.to_context()}
+    if GOOGLE_SITE_VERIFICATION:
+        ctx["GOOGLE_SITE_VERIFICATION"] = GOOGLE_SITE_VERIFICATION
+    return templates.TemplateResponse(request, "privacy-policy.html", ctx)
+
+
+@app.get("/terms-conditions", response_class=HTMLResponse)
+async def terms_conditions(request: Request):
+    ctx = {**TERMS_SEO.to_context()}
+    if GOOGLE_SITE_VERIFICATION:
+        ctx["GOOGLE_SITE_VERIFICATION"] = GOOGLE_SITE_VERIFICATION
+    return templates.TemplateResponse(request, "terms-conditions.html", ctx)
 
 
 @app.get("/login", response_class=HTMLResponse)
