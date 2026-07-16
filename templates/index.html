@@ -8,7 +8,7 @@
   "@context": "https://schema.org",
   "@type": "BeautySalon",
   "name": "Boho Bloom Luxury Salon",
-  "image": "https://bohobloomsalon.com/static/images/salon-hero.jpg",
+  "image": "https://bohobloomsalon.com/static/images/makeup.jpg",
   "url": "https://bohobloomsalon.com/",
   "telephone": "+91 77956 93862",
   "priceRange": "$$",
@@ -90,7 +90,9 @@
     <div class="hero-panel">
       <nav class="navbar" role="navigation" aria-label="Main navigation">
         <a href="#home" class="navbar-brand">
-          <span class="brand-mark">B</span>
+          <span class="brand-mark">
+            <img src="{{ url_for('static', path='images/boho-bloom-monogram.png') }}?v=3" alt="Boho Bloom monogram logo">
+          </span>
           <span class="brand-copy">
             <strong>Boho Bloom</strong>
             <span>Luxury Salon</span>
@@ -229,12 +231,19 @@
   </section>
 
   <section class="types-section section" id="gallery">
-    <div class="types-media reveal">
-      <div class="types-video">
-        <div class="play-button"></div>
-      </div>
+    <div class="types-about reveal">
+      <p class="eyebrow">About us</p>
+      <h2>Where Luxury Meets <br>Everyday Beauty</h2>
+      <p>
+        At Boho Bloom, we believe beauty is personal. Our boutique salon in Hanamkonda blends premium hair, nail, and makeup artistry with a warm, unhurried experience — because every guest deserves to feel celebrated.
+      </p>
+      <p>
+        From delicate bridal finishes to effortless daily gloss, every service is shaped to your features, your occasion, your story.
+      </p>
+      <div class="types-divider"></div>
+      <p class="types-tagline">REC to Darga Road, near REC Petrol Pump &mdash; open daily <strong>9:00 am to 9:00 pm</strong>.</p>
     </div>
-    <div class="types-copy reveal reveal-delay-1">
+    <div class="types-copy reveal">
       <p class="eyebrow">Choose the type</p>
       <h2>Beauty Rituals Curated For Your Mood</h2>
       <p>Whether you want a polished daily refresh or a full celebration-ready transformation, our menus are arranged to feel effortless.</p>
@@ -245,11 +254,11 @@
         </article>
         <article class="type-pill">
           <div class="type-visual visual-makeup"></div>
-          <h3>Makeup</h3>
+          <h3>Straightening</h3>
         </article>
         <article class="type-pill">
           <div class="type-visual visual-nails"></div>
-          <h3>Nails</h3>
+          <h3>Hair Wash</h3>
         </article>
       </div>
     </div>
@@ -293,14 +302,6 @@
         <button type="submit" class="btn btn-dark">Send Enquiry</button>
       </form>
     </div>
-  </section>
-
-  <section class="brand-strip">
-    <div>Boho Bloom</div>
-    <div>Luxury Hair</div>
-    <div>Signature Nails</div>
-    <div>Soft Glam</div>
-    <div>Bridal Studio</div>
   </section>
 
   <footer class="footer">

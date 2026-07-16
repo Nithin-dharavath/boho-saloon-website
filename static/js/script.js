@@ -30,10 +30,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     anchor.addEventListener('click', (event) => {
-      event.preventDefault();
       const targetId = anchor.getAttribute('href');
-      const target = targetId ? document.querySelector(targetId) : null;
-      target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (targetId && targetId.length > 1 && !document.querySelector(targetId)) {
+        event.preventDefault();
+      }
     });
   });
 

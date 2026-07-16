@@ -241,6 +241,19 @@ p {
   font-family: 'Cormorant Garamond', serif;
   font-size: 1.35rem;
   font-weight: 700;
+  overflow: hidden;
+}
+
+.navbar .brand-mark {
+  background: transparent;
+  border: none;
+}
+
+.brand-mark img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
 }
 
 .brand-copy {
@@ -371,8 +384,11 @@ p {
 
 .hero-note {
   max-width: 290px;
-  font-size: 0.88rem;
-  color: rgba(255, 250, 245, 0.86);
+  padding: 18px 22px;
+  border-radius: 18px;
+  background: rgba(255, 248, 241, 0.92);
+  color: var(--cocoa);
+  box-shadow: var(--shadow-soft);
 }
 
 .hero-note strong {
@@ -380,6 +396,7 @@ p {
   margin-bottom: 8px;
   font-size: 0.95rem;
   letter-spacing: 0.04em;
+  color: var(--espresso);
 }
 
 .hero-aside {
@@ -391,9 +408,9 @@ p {
 
 .stat-bubble,
 .highlight-card {
-  background: rgba(255, 248, 241, 0.94);
+  background: var(--white);
   border-radius: 26px;
-  box-shadow: var(--shadow-soft);
+  box-shadow: 0 14px 40px rgba(40, 22, 15, 0.18);
 }
 
 .stat-bubble {
@@ -416,7 +433,7 @@ p {
   border: 3px solid rgba(255, 248, 241, 0.94);
   background:
     linear-gradient(135deg, rgba(212, 177, 142, 0.65), rgba(91, 53, 29, 0.45)),
-    url('/static/images/salon-about.jpg') center / cover no-repeat;
+    url('/static/images/makeup-tools.jpg') center / cover no-repeat;
   margin-left: -10px;
 }
 
@@ -450,7 +467,7 @@ p {
   min-height: 110px;
   background:
     linear-gradient(135deg, rgba(212, 177, 142, 0.16), rgba(255, 255, 255, 0.08)),
-    url('/static/images/salon-about.jpg') center / cover no-repeat;
+    url('/static/images/katherine.jpg') center / cover no-repeat;
 }
 
 .highlight-copy {
@@ -536,7 +553,6 @@ p {
 
 .editorial-photo,
 .stack-card,
-.types-video,
 .collection-thumb,
 .type-visual {
   background-size: cover;
@@ -549,7 +565,7 @@ p {
   box-shadow: var(--shadow);
   background-image:
     linear-gradient(180deg, rgba(40, 22, 15, 0.1), rgba(40, 22, 15, 0.28)),
-    url('/static/images/salon-about.jpg');
+    url('/static/images/hairdesign.jpg');
   position: relative;
 }
 
@@ -596,11 +612,11 @@ p {
 }
 
 .stack-top {
-  background-image: url('/static/images/salon-hero.jpg');
+  background-image: url('/static/images/aesthetic-cut.jpg');
 }
 
 .stack-bottom {
-  background-image: url('/static/images/salon-about.jpg');
+  background-image: url('/static/images/nail-wash.jpg');
 }
 
 .collection-band {
@@ -641,19 +657,19 @@ p {
 .thumb-hair {
   background-image:
     linear-gradient(180deg, rgba(40, 22, 15, 0.1), rgba(40, 22, 15, 0.18)),
-    url('/static/images/salon-hero.jpg');
+    url('/static/images/hair-cut.jpg');
 }
 
 .thumb-bridal {
   background-image:
     linear-gradient(180deg, rgba(40, 22, 15, 0.12), rgba(40, 22, 15, 0.2)),
-    url('/static/images/salon-about.jpg');
+    url('/static/images/makeup.jpg');
 }
 
 .thumb-nails {
   background-image:
     linear-gradient(180deg, rgba(40, 22, 15, 0.08), rgba(40, 22, 15, 0.16)),
-    url('/static/images/salon-hero.jpg');
+    url('/static/images/nail-wash.jpg');
   background-position: right center;
 }
 
@@ -670,41 +686,39 @@ p {
 .types-section {
   padding: 88px 0;
   display: grid;
-  grid-template-columns: 1.15fr 1fr;
-  gap: 40px;
-  align-items: center;
+  grid-template-columns: 1.05fr 1fr;
+  gap: 48px;
+  align-items: start;
 }
 
-.types-video {
-  position: relative;
-  min-height: 330px;
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow);
-  background-image:
-    linear-gradient(180deg, rgba(40, 22, 15, 0.12), rgba(40, 22, 15, 0.22)),
-    url('/static/images/salon-hero.jpg');
+.types-about h2 {
+  font-size: clamp(2.4rem, 4vw, 3.8rem);
+  margin-bottom: 18px;
 }
 
-.play-button {
-  position: absolute;
-  inset: 50% auto auto 50%;
-  width: 76px;
-  height: 76px;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(255, 248, 241, 0.9);
-  box-shadow: var(--shadow-soft);
+.types-about p {
+  color: rgba(75, 47, 31, 0.72);
+  max-width: 500px;
+  margin-bottom: 14px;
 }
 
-.play-button::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-35%, -50%);
-  border-left: 18px solid var(--mocha);
-  border-top: 12px solid transparent;
-  border-bottom: 12px solid transparent;
+.types-divider {
+  width: 50px;
+  height: 2px;
+  background: var(--tan);
+  margin: 24px 0;
+}
+
+.types-tagline {
+  max-width: 480px;
+  font-size: 1.05rem;
+  color: rgba(75, 47, 31, 0.7);
+  line-height: 1.7;
+}
+
+.types-tagline strong {
+  color: var(--mocha);
+  font-weight: 600;
 }
 
 .type-list {
@@ -729,15 +743,15 @@ p {
 }
 
 .visual-hair {
-  background-image: url('/static/images/salon-about.jpg');
+  background-image: url('/static/images/haircare.png');
 }
 
 .visual-makeup {
-  background-image: url('/static/images/salon-hero.jpg');
+  background-image: url('/static/images/katherine.jpg');
 }
 
 .visual-nails {
-  background-image: url('/static/images/salon-about.jpg');
+  background-image: url('/static/images/hair-wash.jpg');
   background-position: right center;
 }
 
@@ -829,19 +843,6 @@ p {
   box-shadow: 0 0 0 4px rgba(180, 136, 96, 0.12);
 }
 
-.brand-strip {
-  width: 100%;
-  padding: 22px 24px;
-  background: linear-gradient(180deg, #e8d0b6, #dcc0a3);
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 12px;
-  text-align: center;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.75rem;
-  color: var(--cocoa);
-}
-
 .footer {
   display: flex;
   justify-content: space-between;
@@ -894,9 +895,6 @@ p {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .brand-strip {
-    grid-template-columns: repeat(3, 1fr);
-  }
 }
 
 @media (max-width: 820px) {
@@ -951,8 +949,7 @@ p {
     width: min(100%, calc(100% - 24px));
   }
 
-  .collection-grid,
-  .brand-strip {
+  .collection-grid {
     grid-template-columns: 1fr;
   }
 
