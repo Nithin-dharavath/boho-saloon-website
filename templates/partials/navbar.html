@@ -14,7 +14,7 @@
     <li><a href="/services" class="{{ 'navbar-link-active' if active == 'services' else '' }}">Services</a></li>
     <li><a href="/#contact" class="navbar-cta">Book Visit</a></li>
     {% if user and user.id %}
-      <li><a href="/auth/me" class="navbar-user">{{ user.name or "Account" }}</a></li>
+      <li><a href="/profile" class="navbar-user">{{ user.name or "Account" }}</a></li>
     {% else %}
       <li><a href="/login" class="navbar-signin">Sign In</a></li>
     {% endif %}

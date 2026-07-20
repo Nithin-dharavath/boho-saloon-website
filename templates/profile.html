@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block title %}My Profile — Boho Bloom{% endblock %}
+{% block extra_head %}
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="/static/css/profile.css?v=1">
+{% endblock %}
+{% block content %}
+{% include "partials/navbar.html" %}
+<div class="profile-blobs">
+  <div class="profile-blob"></div>
+  <div class="profile-blob"></div>
+  <div class="profile-blob"></div>
+</div>
+
+<div class="profile-shell">
+  <div class="profile-card profile-glass reveal">
+    <div class="profile-avatar reveal reveal-delay-1" id="profile-avatar">{{ profile.initials }}</div>
+
+    <div class="profile-member-id reveal reveal-delay-1">{{ profile.member_id }}</div>
+
+    <button class="profile-edit-btn reveal reveal-delay-1" id="profile-edit-btn" aria-label="Edit profile">&#9998;</button>
+
+    <div id="profile-message" class="profile-message" role="status" aria-live="polite"></div>
+
+    <div class="profile-fields">
+      <div class="profile-field reveal reveal-delay-1" data-field="name">
+        <span class="profile-field-label">Name</span>
+        <span class="profile-field-value" id="field-name">{{ profile.name }}</span>
+        <input class="profile-field-edit" id="input-name" type="text" value="{{ profile.name or '' }}" maxlength="100">
+      </div>
+
+      <div class="profile-field profile-field-viewonly reveal reveal-delay-1">
+        <span class="profile-field-label">Email</span>
+        <span class="profile-field-value">{{ profile.email }}</span>
+      </div>
+
+      <div class="profile-field reveal reveal-delay-2" data-field="dob">
+        <span class="profile-field-label">Birthday</span>
+        <span class="profile-field-value" id="field-dob">{{ profile.date_of_birth or "—" }}</span>
+        <input class="profile-field-edit" id="input-dob" type="date" value="{{ profile.date_of_birth or '' }}">
+      </div>
+
+      <div class="profile-field profile-field-viewonly reveal reveal-delay-2">
+        <span class="profile-field-label">Age</span>
+        <span class="profile-field-value" id="field-age">{{ profile.age ~ " years" if profile.age is not none else "—" }}</span>
+      </div>
+
+      <div class="profile-field profile-field-viewonly reveal reveal-delay-2">
+        <span class="profile-field-label">Member since</span>
+        <span class="profile-field-value">{{ profile.created_at[:10] if profile.created_at else "—" }}</span>
+      </div>
+    </div>
+
+    <div class="profile-actions" id="profile-actions">
+      <button class="btn btn-outline" id="profile-cancel-btn">Cancel</button>
+      <button class="btn btn-dark" id="profile-save-btn" style="width:auto;min-width:120px">Save</button>
+    </div>
+
+    {% if bookings %}
+    <div class="profile-divider"></div>
+
+    <div class="profile-bookings">
+      <div class="profile-bookings-header reveal reveal-delay-2">
+        <h2>Recent Appointments</h2>
+        <span>Sample preview</span>
+      </div>
+      <div class="bookings-grid">
+        {% for booking in bookings %}
+        <div class="booking-card reveal reveal-delay-2">
+          <div class="booking-icon">&#128197;</div>
+          <div class="booking-info">
+            <h4>{{ booking.service }}</h4>
+            <p>{{ booking.date }}</p>
+          </div>
+          <span class="booking-price">{{ booking.price }}</span>
+          <span class="status-badge status-badge-completed">{{ booking.status }}</span>
+        </div>
+        {% endfor %}
+      </div>
+      <p class="profile-demo-note">Demo data for preview — actual bookings coming soon</p>
+    </div>
+    {% else %}
+    <div class="profile-divider"></div>
+    <div class="profile-bookings">
+      <h2 class="reveal reveal-delay-2" style="font-size:1.4rem;margin-bottom:18px">Recent Appointments</h2>
+      <div class="bookings-empty reveal reveal-delay-2">
+        <p>No appointments yet. Your completed and upcoming bookings will appear here.</p>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/script.js?v=6"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  initProfileEdit();
+});
+</script>
+{% endblock %}

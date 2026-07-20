@@ -54,3 +54,32 @@ class ProfileSetup(BaseModel):
         if parsed < date(1900, 1, 1):
             raise ValueError("Invalid date of birth")
         return v
+
+
+class ProfileUpdate(BaseModel):
+    name: str
+    date_of_birth: str | None = None
+
+    @field_validator("name")
+    @classmethod
+    def validate_name(cls, v):
+        v = v.strip()
+        if len(v) < 1 or len(v) > 100:
+            raise ValueError("Name must be between 1 and 100 characters")
+        return v
+
+    @field_validator("date_of_birth")
+    @classmethod
+    def validate_dob(cls, v):
+        if v is None:
+            return v
+        v = v.strip()
+        try:
+            parsed = date.fromisoformat(v)
+        except ValueError:
+            raise ValueError("Date of birth must be YYYY-MM-DD")
+        if parsed > date.today():
+            raise ValueError("Date of birth cannot be in the future")
+        if parsed < date(1900, 1, 1):
+            raise ValueError("Invalid date of birth")
+        return v

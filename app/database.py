@@ -2,6 +2,15 @@ import sqlite3
 from app.config import DATABASE_URL
 
 
+def migrate_schema(conn):
+    existing = {row["name"] for row in conn.execute("PRAGMA table_info(users)").fetchall()}
+    if "google_sub" not in existing:
+        conn.execute("ALTER TABLE users ADD COLUMN google_sub TEXT")
+    if "phone" not in existing:
+        conn.execute("ALTER TABLE users ADD COLUMN phone TEXT")
+    conn.commit()
+
+
 def get_db():
     conn = sqlite3.connect(DATABASE_URL)
     conn.row_factory = sqlite3.Row
@@ -45,5 +54,6 @@ def init_db():
             idempotency_key TEXT UNIQUE NOT NULL
         );
     """)
+    migrate_schema(conn)
     conn.commit()
     conn.close()
