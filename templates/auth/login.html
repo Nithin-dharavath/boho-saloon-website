@@ -20,22 +20,66 @@
       <p class="auth-desc">Enter your email address and we'll send you a one-time code.</p>
 
       <form id="email-form" autocomplete="off">
-        <label>
-          <span>Email Address</span>
-          <input
-            type="email"
-            id="email-input"
-            placeholder="you@example.com"
-            required
-            autocomplete="email"
-            inputmode="email"
-          >
-        </label>
+        <div class="form-group">
+          <label>
+            <span>Full Name</span>
+            <input
+              type="text"
+              id="name-input"
+              placeholder="Enter your full name"
+              required
+              autocomplete="name"
+            >
+          </label>
+        </div>
+        <div class="form-group">
+          <label>
+            <span>Email Address</span>
+            <input
+              type="email"
+              id="email-input"
+              placeholder="you@example.com"
+              required
+              autocomplete="email"
+              inputmode="email"
+            >
+          </label>
+        </div>
+        <div class="form-group">
+          <label>
+            <span>Date of Birth</span>
+            <input
+              type="date"
+              id="dob-input"
+              required
+              max="2024-12-31"
+            >
+          </label>
+          <span id="age-display" class="age-note">Age: <span id="age-value"></span></span>
+        </div>
+        <div class="form-group">
+          <label>
+            <span>Note (optional)</span>
+            <textarea
+              id="note-input"
+              placeholder="Anything you'd like us to know?"
+              rows="3"
+            ></textarea>
+          </label>
+        </div>
         <div class="auth-error" id="email-error"></div>
-        <button type="submit" class="btn btn-dark" id="send-code-btn">
+        <button type="submit" class="btn btn-dark w-100" id="send-code-btn">
           Send Code
         </button>
       </form>
+      
+      <!-- Google Sign-In Button -->
+      <button type="button" class="btn btn-google" id="google-signin-btn" aria-label="Sign in with Google">
+        <div class="google-icon-wrapper">
+          <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google" class="google-icon">
+        </div>
+        <div class="google-button-text">Continue with Google</div>
+      </button>
     </div>
 
     <div class="auth-step hidden" id="step-otp">
@@ -87,6 +131,11 @@
   const emailForm = document.getElementById('email-form');
   const otpForm = document.getElementById('otp-form');
   const emailInput = document.getElementById('email-input');
+  const nameInput = document.getElementById('name-input');
+  const dobInput = document.getElementById('dob-input');
+  const noteInput = document.getElementById('note-input');
+  const ageDisplay = document.getElementById('age-display');
+  const ageValue = document.getElementById('age-value');
   const codeInput = document.getElementById('code-input');
   const displayEmail = document.getElementById('display-email');
   const emailError = document.getElementById('email-error');
@@ -102,13 +151,47 @@
     hide.classList.add('hidden');
   }
 
+  // Calculate age from date of birth
+  function calculateAge(dobString) {
+    if (!dobString) return '';
+    const today = new Date();
+    const birthDate = new Date(dobString);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  }
+
+  // Update age display when DOB changes
+  dobInput.addEventListener('change', () => {
+    const age = calculateAge(dobInput.value);
+    ageValue.textContent = age;
+    ageDisplay.style.display = age ? 'inline' : 'none';
+  });
+
   emailForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     emailError.textContent = '';
     const email = emailInput.value.trim().toLowerCase();
+    const name = nameInput.value.trim();
+    const dob = dobInput.value;
+    const note = noteInput.value.trim();
 
+    // Basic validation
     if (!email || !email.includes('@')) {
       emailError.textContent = 'Please enter a valid email address.';
+      return;
+    }
+    if (!name) {
+      emailError.textContent = 'Please enter your full name.';
+      nameInput.focus();
+      return;
+    }
+    if (!dob) {
+      emailError.textContent = 'Please select your date of birth.';
+      dobInput.focus();
       return;
     }
 
@@ -119,7 +202,7 @@
       const res = await fetch('/auth/request-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, name, dob, note }),
       });
       const data = await res.json();
 

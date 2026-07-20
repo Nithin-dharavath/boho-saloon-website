@@ -2,3 +2,6 @@ venv/
 pycache*
 .env
 database/*.db
+.claude/
+codex/
+.opencode/

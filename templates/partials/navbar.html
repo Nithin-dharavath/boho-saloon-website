@@ -1,0 +1,27 @@
+<nav class="navbar" role="navigation" aria-label="Main navigation">
+  <a href="/" class="navbar-brand">
+    <span class="brand-mark">
+      <img src="{{ url_for('static', path='images/boho-bloom-monogram.png') }}?v=3" alt="Boho Bloom monogram logo">
+    </span>
+    <span class="brand-copy">
+      <strong>Boho Bloom</strong>
+      <span>Luxury Salon</span>
+    </span>
+  </a>
+  <ul class="navbar-links">
+    <li><a href="/" class="{{ 'navbar-link-active' if active == 'home' else '' }}">Home</a></li>
+    <li><a href="/#about" class="{{ 'navbar-link-active' if active == 'about' else '' }}">About Us</a></li>
+    <li><a href="/services" class="{{ 'navbar-link-active' if active == 'services' else '' }}">Services</a></li>
+    <li><a href="/#contact" class="navbar-cta">Book Visit</a></li>
+    {% if user and user.id %}
+      <li><a href="/auth/me" class="navbar-user">{{ user.name or "Account" }}</a></li>
+    {% else %}
+      <li><a href="/login" class="navbar-signin">Sign In</a></li>
+    {% endif %}
+  </ul>
+  <button class="navbar-toggle" aria-label="Toggle menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+</nav>

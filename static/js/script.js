@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
   if (typeof window === 'undefined') return;
 
+  console.log('boho-bloom: script.js loaded v3');
+
   const navbar = document.querySelector('.navbar');
   const toggle = document.querySelector('.navbar-toggle');
   const navLinks = document.querySelector('.navbar-links');
@@ -15,24 +17,42 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { passive: true });
 
   toggle?.addEventListener('click', () => {
-    toggle.classList.toggle('active');
-    navLinks?.classList.toggle('active');
-    document.body.style.overflow = navLinks?.classList.contains('active') ? 'hidden' : '';
+    const isActive = toggle.classList.toggle('active');
+    navLinks?.classList.toggle('active', isActive);
+    toggle.setAttribute('aria-expanded', String(isActive));
+    document.body.style.overflow = isActive ? 'hidden' : '';
   });
 
-  document.querySelectorAll('.navbar-links a').forEach((link) => {
+  const closeAllOverlays = () => {
+    toggle?.classList.remove('active');
+    navLinks?.classList.remove('active');
+    toggle?.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+    document.querySelectorAll('.overlay.active, .modal.active, [data-open="true"]').forEach((el) => {
+      el.classList.remove('active');
+      el.removeAttribute('data-open');
+    });
+  };
+
+  document.querySelectorAll('.navbar-links a, .navbar-brand').forEach((link) => {
     link.addEventListener('click', () => {
-      toggle?.classList.remove('active');
-      navLinks?.classList.remove('active');
-      document.body.style.overflow = '';
+      closeAllOverlays();
     });
   });
 
   document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     anchor.addEventListener('click', (event) => {
       const targetId = anchor.getAttribute('href');
-      if (targetId && targetId.length > 1 && !document.querySelector(targetId)) {
-        event.preventDefault();
+      if (targetId && targetId.length > 1) {
+        const target = document.querySelector(targetId);
+        if (target) {
+          event.preventDefault();
+          closeAllOverlays();
+          history.pushState(null, '', targetId);
+          const navbarHeight = navbar ? navbar.offsetHeight : 0;
+          const top = target.getBoundingClientRect().top + window.pageYOffset - navbarHeight - 12;
+          window.scrollTo({ top, behavior: 'smooth' });
+        }
       }
     });
   });
