@@ -120,4 +120,145 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('mouseleave', () => {
     cursorGlow.style.opacity = '0';
   }, { passive: true });
+
+  const pageGlow = document.querySelector('.page-glow');
+  if (pageGlow) {
+    pageGlow.style.animation = 'floatGlow 8s ease-in-out infinite';
+  }
 });
+
+function initProfileEdit() {
+  const editBtn = document.getElementById('profile-edit-btn');
+  const cancelBtn = document.getElementById('profile-cancel-btn');
+  const saveBtn = document.getElementById('profile-save-btn');
+  const actions = document.getElementById('profile-actions');
+  const message = document.getElementById('profile-message');
+  const fields = document.querySelectorAll('.profile-field[data-field]');
+
+  if (!editBtn || !cancelBtn || !saveBtn) return;
+
+  let originals = {};
+
+  function storeOriginals() {
+    originals = {};
+    fields.forEach(function(f) {
+      var input = f.querySelector('.profile-field-edit');
+      if (input) originals[f.dataset.field] = input.value;
+    });
+  }
+
+  function enterEditMode() {
+    storeOriginals();
+    fields.forEach(function(f) { f.classList.add('editing'); });
+    actions.classList.add('visible');
+    editBtn.style.display = 'none';
+    message.textContent = '';
+    message.className = 'profile-message';
+  }
+
+  function exitEditMode() {
+    fields.forEach(function(f) { f.classList.remove('editing'); });
+    actions.classList.remove('visible');
+    editBtn.style.display = '';
+  }
+
+  function cancelEdit() {
+    fields.forEach(function(f) {
+      var input = f.querySelector('.profile-field-edit');
+      if (input && originals[f.dataset.field] !== undefined) {
+        input.value = originals[f.dataset.field];
+        var display = f.querySelector('.profile-field-value');
+        if (display) display.textContent = input.value || '\u2014';
+      }
+    });
+    exitEditMode();
+  }
+
+  function showSuccess(msg) {
+    message.textContent = msg;
+    message.className = 'profile-message profile-message-success';
+  }
+
+  function showError(msg) {
+    message.textContent = msg;
+    message.className = 'profile-message profile-message-error';
+  }
+
+  function updateAvatar(name) {
+    var avatar = document.getElementById('profile-avatar');
+    if (!avatar) return;
+    var trimmed = (name || '').trim();
+    var initials = 'U';
+    if (trimmed) {
+      var parts = trimmed.split(/\s+/);
+      if (parts.length >= 2) {
+        initials = (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+      } else {
+        initials = parts[0][0].toUpperCase();
+      }
+    }
+    avatar.textContent = initials;
+  }
+
+  editBtn.addEventListener('click', enterEditMode);
+
+  cancelBtn.addEventListener('click', cancelEdit);
+
+  saveBtn.addEventListener('click', async function() {
+    var nameInput = document.getElementById('input-name');
+    var dobInput = document.getElementById('input-dob');
+    if (!nameInput) return;
+
+    var name = nameInput.value.trim();
+    if (!name) {
+      showError('Name cannot be empty');
+      return;
+    }
+
+    var payload = { name: name };
+    if (dobInput && dobInput.value) {
+      payload.date_of_birth = dobInput.value;
+    }
+
+    try {
+      var res = await fetch('/profile/update', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        var errData;
+        try { errData = await res.json(); } catch (_) {}
+        showError((errData && errData.detail) || 'Unable to update profile. Please try again.');
+        return;
+      }
+
+      var data = await res.json();
+
+      var nameDisplay = document.getElementById('field-name');
+      if (nameDisplay) nameDisplay.textContent = data.name;
+      updateAvatar(data.name);
+
+      if (data.date_of_birth) {
+        var dobDisplay = document.getElementById('field-dob');
+        if (dobDisplay) dobDisplay.textContent = data.date_of_birth;
+        var ageDisplay = document.getElementById('field-age');
+        if (ageDisplay && data.age !== null && data.age !== undefined) {
+          ageDisplay.textContent = data.age + ' years';
+        }
+      }
+
+      exitEditMode();
+      showSuccess('Profile updated successfully');
+      setTimeout(function() {
+        message.textContent = '';
+        message.className = 'profile-message';
+      }, 3000);
+    } catch (err) {
+      showError('Unable to update profile. Please try again.');
+    }
+  });
+
+  storeOriginals();
+}

@@ -7,12 +7,16 @@ from datetime import datetime, timedelta
 from fastapi import APIRouter, Request, Response, HTTPException
 from jose import jwt
 
+from google.oauth2 import id_token
+from google.auth.transport import requests as google_requests
+
 from app.config import (
     SECRET_KEY,
     OTP_EXPIRY_MINUTES,
     OTP_MAX_ATTEMPTS,
     JWT_EXPIRY_HOURS,
     OTP_RATE_LIMIT_SECONDS,
+    GOOGLE_CLIENT_ID,
 )
 from app.database import get_db
 from app.email_utils import send_otp_email
@@ -149,6 +153,93 @@ async def verify_otp(body: OTPVerify, response: Response):
     )
 
     needs_profile = is_new or not user["name"]
+
+    return {
+        "ok": True,
+        "is_new": is_new,
+        "needs_profile": needs_profile,
+        "user": {"id": user["id"], "email": user["email"], "name": user["name"]},
+    }
+
+
+@router.post("/google")
+async def google_auth(body: dict, response: Response):
+    credential = body.get("credential")
+    if not credential:
+        return {"ok": False, "error": "Missing credential"}
+
+    if not GOOGLE_CLIENT_ID:
+        return {"ok": False, "error": "Google sign-in not configured"}
+
+    try:
+        info = id_token.verify_oauth2_token(
+            credential, google_requests.Request(), GOOGLE_CLIENT_ID
+        )
+    except ValueError:
+        return {"ok": False, "error": "Invalid Google token"}
+
+    email = info.get("email")
+    google_sub = info.get("sub")
+    google_name = info.get("name", "")
+    email_verified = info.get("email_verified", False)
+
+    if not email or not email_verified:
+        return {"ok": False, "error": "Google email not verified"}
+
+    db = get_db()
+
+    user = db.execute(
+        "SELECT * FROM users WHERE google_sub = ?", (google_sub,)
+    ).fetchone()
+
+    if not user:
+        user = db.execute(
+            "SELECT * FROM users WHERE email = ?", (email,)
+        ).fetchone()
+        if user:
+            db.execute(
+                "UPDATE users SET google_sub = ? WHERE id = ?",
+                (google_sub, user["id"]),
+            )
+            db.commit()
+
+    is_new = False
+    if not user:
+        db.execute(
+            "INSERT INTO users (email, name, google_sub) VALUES (?, ?, ?)",
+            (email, google_name or None, google_sub),
+        )
+        db.commit()
+        user = db.execute(
+            "SELECT * FROM users WHERE google_sub = ?", (google_sub,)
+        ).fetchone()
+        is_new = True
+
+    if user and google_name and not user["name"]:
+        db.execute(
+            "UPDATE users SET name = ? WHERE id = ?",
+            (google_name, user["id"]),
+        )
+        db.commit()
+        user = db.execute(
+            "SELECT * FROM users WHERE id = ?", (user["id"],)
+        ).fetchone()
+
+    db.close()
+
+    token = create_jwt(user["id"], user["email"])
+
+    response.set_cookie(
+        key="session",
+        value=token,
+        httponly=True,
+        samesite="lax",
+        max_age=JWT_EXPIRY_HOURS * 3600,
+        secure=False,
+        path="/",
+    )
+
+    needs_profile = not user["name"]
 
     return {
         "ok": True,

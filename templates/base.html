@@ -35,9 +35,56 @@
 
   {% block extra_head %}{% endblock %}
   <link rel="stylesheet" href="/static/css/style.css?v=2">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
   {% block content %}{% endblock %}
   {% block scripts %}{% endblock %}
+
+  {% if not user %}
+  <script>
+  function initGoogleIdentity() {
+    if (typeof google === 'undefined' || !google.accounts) return;
+    google.accounts.id.initialize({
+      client_id: '{{ GOOGLE_CLIENT_ID }}',
+      callback: handleGoogleCredential,
+      auto_select: false,
+      cancel_on_tap_outside: false,
+    });
+    var btn = document.getElementById('google-signin-btn');
+    if (btn) {
+      google.accounts.id.renderButton(btn, {
+        theme: 'outline', size: 'large', text: 'continue_with', width: 350,
+      });
+    }
+    google.accounts.id.prompt();
+  }
+  window.onload = initGoogleIdentity;
+  </script>
+  {% endif %}
+
+  <script>
+  async function handleGoogleCredential(response) {
+    try {
+      const res = await fetch('/auth/google', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ credential: response.credential }),
+      });
+      const data = await res.json();
+      if (data.ok) {
+        if (data.needs_profile) {
+          window.location.href = '/profile/setup';
+        } else {
+          window.location.href = window.location.pathname;
+        }
+      } else {
+        console.error('Google sign-in error:', data.error);
+      }
+    } catch (err) {
+      console.error('Google sign-in network error:', err);
+    }
+  }
+  </script>
 </body>
 </html>

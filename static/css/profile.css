@@ -1,0 +1,619 @@
+/* ── Profile Dashboard ──────────────────────────── */
+
+.profile-shell {
+  width: min(1160px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 100px 0 60px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Sidebar Card ──────────────────────────────── */
+
+.profile-glass {
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-soft);
+}
+
+@supports not (backdrop-filter: blur(24px)) {
+  .profile-glass {
+    background: rgba(255, 255, 255, 0.92);
+  }
+}
+
+.profile-sidebar .profile-card {
+  padding: 40px 28px;
+  text-align: center;
+}
+
+.profile-avatar-ring {
+  width: 130px;
+  height: 130px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  padding: 5px;
+  background: linear-gradient(135deg, var(--bronze), var(--tan), var(--sand));
+  position: relative;
+}
+
+.profile-avatar-ring::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(180, 136, 96, 0.3), rgba(212, 177, 142, 0.1));
+  filter: blur(8px);
+  z-index: -1;
+}
+
+.profile-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--bronze), var(--tan));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.6rem;
+  font-weight: 700;
+  color: var(--white);
+}
+
+.profile-name {
+  font-size: 1.6rem;
+  color: var(--cocoa);
+  margin-top: 20px;
+  margin-bottom: 6px;
+}
+
+.profile-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  border-radius: var(--radius-pill);
+  background: rgba(180, 136, 96, 0.12);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--mocha);
+  font-family: 'Manrope', monospace;
+}
+
+.profile-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+
+.profile-stat {
+  text-align: center;
+  padding: 12px 8px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.4);
+  transition: background 0.3s var(--ease), transform 0.3s var(--ease);
+}
+
+.profile-stat:hover {
+  background: rgba(255, 255, 255, 0.6);
+  transform: translateY(-1px);
+}
+
+.profile-stat-value {
+  display: block;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--cocoa);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.profile-stat-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(75, 47, 31, 0.5);
+}
+
+.profile-edit-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 24px;
+  padding: 10px 22px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(180, 136, 96, 0.3);
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--mocha);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: background 0.3s var(--ease), transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+}
+
+.profile-edit-trigger:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(180, 136, 96, 0.2);
+}
+
+.profile-edit-trigger:active {
+  transform: scale(0.97);
+}
+
+/* ── Dashboard Grid ────────────────────────────── */
+
+.profile-dashboard {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+/* ── Sidebar ───────────────────────────────────── */
+
+.profile-sidebar {
+  position: sticky;
+  top: 100px;
+}
+
+.profile-sidebar .profile-card {
+  padding: 36px 28px;
+  text-align: center;
+}
+
+/* ── Main Area ─────────────────────────────────── */
+
+.profile-main {
+  display: grid;
+  gap: 24px;
+}
+
+/* ── Details Card ──────────────────────────────── */
+
+.profile-details-card {
+  padding: 32px 36px;
+}
+
+.profile-details-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.profile-details-header h2 {
+  font-size: 1.5rem;
+  color: var(--cocoa);
+}
+
+.profile-fields {
+  display: grid;
+  gap: 2px;
+}
+
+.profile-field {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 18px;
+  border-radius: var(--radius-md);
+  transition: background 0.3s var(--ease), border-color 0.3s var(--ease), box-shadow 0.3s var(--ease);
+}
+
+.profile-field:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.profile-field-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(75, 47, 31, 0.55);
+}
+
+.profile-field-value {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--cocoa);
+  word-break: break-word;
+}
+
+.profile-field-edit {
+  width: 100%;
+  max-width: 280px;
+  border: 1px solid rgba(75, 47, 31, 0.14);
+  border-radius: 14px;
+  padding: 10px 14px;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--cocoa);
+  background: rgba(255, 255, 255, 0.94);
+  outline: none;
+  transition: border-color 0.3s var(--ease), box-shadow 0.3s var(--ease);
+}
+
+.profile-field-edit:focus {
+  border-color: rgba(180, 136, 96, 0.7);
+  box-shadow: 0 0 0 4px rgba(180, 136, 96, 0.12);
+}
+
+.profile-field.editing {
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(180, 136, 96, 0.2);
+  box-shadow: 0 0 0 3px rgba(180, 136, 96, 0.06);
+}
+
+.profile-field.editing .profile-field-value {
+  display: none;
+}
+
+.profile-field .profile-field-edit {
+  display: none;
+}
+
+.profile-field.editing .profile-field-edit {
+  display: block;
+}
+
+.profile-field-viewonly .profile-field-value {
+  color: rgba(75, 47, 31, 0.5);
+}
+
+/* ── Actions ───────────────────────────────────── */
+
+.profile-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  min-height: 0;
+  overflow: hidden;
+  transition: min-height 0.35s var(--ease), opacity 0.35s var(--ease), padding 0.35s var(--ease);
+}
+
+.profile-actions:not(.visible) {
+  min-height: 0;
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+  padding-top: 0;
+  margin-top: 0;
+  border-top: none;
+}
+
+.profile-actions.visible {
+  min-height: 50px;
+  opacity: 1;
+}
+
+.profile-actions .btn-dark {
+  width: auto;
+  min-width: 140px;
+}
+
+/* ── Message ───────────────────────────────────── */
+
+.profile-message {
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-align: right;
+  min-height: 1.2em;
+  transition: color 0.3s var(--ease);
+}
+
+.profile-message-success {
+  color: #2d7d46;
+}
+
+.profile-message-error {
+  color: #c0392b;
+}
+
+/* ── Bookings Card ─────────────────────────────── */
+
+.profile-bookings-card {
+  padding: 32px 36px;
+}
+
+.profile-bookings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.profile-bookings-header h2 {
+  font-size: 1.5rem;
+  color: var(--cocoa);
+}
+
+.profile-bookings-count {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(75, 47, 31, 0.5);
+  letter-spacing: 0.04em;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  background: rgba(180, 136, 96, 0.1);
+}
+
+.bookings-list {
+  display: grid;
+  gap: 10px;
+}
+
+.booking-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(75, 47, 31, 0.06);
+  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease), background 0.3s var(--ease);
+}
+
+.booking-row:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-soft);
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.booking-icon-wrap {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(180, 136, 96, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--bronze);
+  flex-shrink: 0;
+}
+
+.booking-meta {
+  min-width: 0;
+}
+
+.booking-meta h4 {
+  font-size: 0.95rem;
+  color: var(--cocoa);
+  margin-bottom: 3px;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.booking-date {
+  font-size: 0.78rem;
+  color: rgba(75, 47, 31, 0.55);
+}
+
+.booking-price {
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: 'Cormorant Garamond', serif;
+  color: var(--mocha);
+  white-space: nowrap;
+}
+
+.status-badge {
+  display: inline-flex;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.status-badge-completed {
+  background: rgba(45, 125, 70, 0.1);
+  color: #2d7d46;
+}
+
+.bookings-empty {
+  text-align: center;
+  padding: 48px 20px;
+  color: rgba(75, 47, 31, 0.5);
+}
+
+.bookings-empty-icon {
+  margin-bottom: 16px;
+  color: rgba(180, 136, 96, 0.3);
+}
+
+.bookings-empty p {
+  font-size: 0.9rem;
+  max-width: 320px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.profile-demo-note {
+  text-align: center;
+  font-size: 0.7rem;
+  color: rgba(75, 47, 31, 0.35);
+  margin-top: 16px;
+  letter-spacing: 0.04em;
+}
+
+/* ── Responsive ────────────────────────────────── */
+
+@media (max-width: 1080px) {
+  .profile-dashboard {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-sidebar {
+    position: static;
+  }
+
+  .profile-sidebar .profile-card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 20px 28px;
+    text-align: left;
+    align-items: center;
+  }
+
+  .profile-sidebar .profile-card > *:not(.profile-stats):not(.profile-edit-trigger) {
+    grid-column: 1 / -1;
+  }
+
+  .profile-sidebar .profile-card > .profile-avatar-ring {
+    grid-column: 1;
+    grid-row: 1 / 3;
+  }
+
+  .profile-sidebar .profile-card > .profile-name {
+    grid-column: 2;
+    grid-row: 1;
+    margin-top: 0;
+    text-align: left;
+  }
+
+  .profile-sidebar .profile-card > .profile-badge {
+    grid-column: 2;
+    grid-row: 2;
+    justify-self: start;
+  }
+
+  .profile-stats {
+    grid-column: 1 / -1;
+  }
+
+  .profile-edit-trigger {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 820px) {
+  .profile-shell {
+    width: min(100%, calc(100% - 24px));
+    padding: 90px 0 40px;
+  }
+
+  .profile-sidebar .profile-card {
+    padding: 28px 22px;
+  }
+
+  .profile-details-card,
+  .profile-bookings-card {
+    padding: 24px 22px;
+  }
+
+  .profile-field {
+    grid-template-columns: 1fr;
+    gap: 4px;
+    padding: 12px 14px;
+  }
+
+  .profile-field-edit {
+    max-width: none;
+  }
+
+  .booking-row {
+    grid-template-columns: auto 1fr auto;
+    gap: 12px;
+    padding: 14px 16px;
+  }
+
+  .booking-row .status-badge {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+
+  .profile-details-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .profile-actions {
+    justify-content: stretch;
+  }
+
+  .profile-actions .btn {
+    flex: 1;
+  }
+}
+
+@media (max-width: 560px) {
+  .profile-shell {
+    padding: 80px 0 30px;
+  }
+
+  .profile-sidebar .profile-card {
+    padding: 24px 18px;
+  }
+
+  .profile-details-card,
+  .profile-bookings-card {
+    padding: 20px 16px;
+    border-radius: var(--radius-lg);
+  }
+
+  .profile-avatar-ring {
+    width: 100px;
+    height: 100px;
+  }
+
+  .profile-avatar {
+    font-size: 2rem;
+  }
+
+  .profile-name {
+    font-size: 1.3rem;
+  }
+
+  .profile-stats {
+    gap: 6px;
+  }
+
+  .profile-stat {
+    padding: 10px 6px;
+  }
+
+  .profile-stat-value {
+    font-size: 1.3rem;
+  }
+
+  .booking-row {
+    padding: 12px 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .profile-stat:hover,
+  .booking-row:hover,
+  .profile-edit-trigger:hover {
+    animation: none !important;
+    transition: none !important;
+  }
+}
