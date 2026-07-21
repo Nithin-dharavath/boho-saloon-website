@@ -1,4 +1,4 @@
-<nav class="navbar" role="navigation" aria-label="Main navigation">
+<nav class="navbar{{ ' navbar-light' if navbar_light else '' }}" role="navigation" aria-label="Main navigation">
   <a href="/" class="navbar-brand">
     <span class="brand-mark">
       <img src="{{ url_for('static', path='images/boho-bloom-monogram.png') }}?v=3" alt="Boho Bloom monogram logo">
