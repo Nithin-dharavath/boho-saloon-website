@@ -8,6 +8,11 @@ DEFAULT_KEYWORDS = (
     "luxury salon, beauty salon, hair care, nails, makeup"
 )
 
+SAME_AS_URLS = [
+    "https://www.instagram.com/bohobloomsalon/",
+    "https://www.facebook.com/bohobloomsalon/",
+]
+
 
 @dataclass
 class SEOMeta:
@@ -32,7 +37,8 @@ class SEOMeta:
                 "robots": self.robots,
                 "site_name": SITE_NAME,
                 "base_url": BASE_URL,
-            }
+            },
+            "same_as_urls": SAME_AS_URLS,
         }
 
 

@@ -73,20 +73,55 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   const bookingForm = document.querySelector('.booking-form');
-  bookingForm?.addEventListener('submit', (event) => {
+  bookingForm?.addEventListener('submit', async (event) => {
     event.preventDefault();
     const button = bookingForm.querySelector('button[type="submit"]');
     if (!button) return;
+    if (button.disabled) return;
 
     const originalText = button.textContent;
-    button.textContent = 'Thank You';
-    button.style.background = '#7b5738';
+    button.disabled = true;
+    button.textContent = 'Sending...';
+    button.style.opacity = '0.7';
 
-    setTimeout(() => {
-      button.textContent = originalText;
-      button.style.background = '';
-      bookingForm.reset();
-    }, 2500);
+    const formData = new FormData(bookingForm);
+    const payload = {
+      name: formData.get('name') || bookingForm.querySelector('input[type="text"]')?.value || '',
+      phone: formData.get('phone') || bookingForm.querySelector('input[type="tel"]')?.value || '',
+      service: bookingForm.querySelector('select')?.value || '',
+      message: bookingForm.querySelector('textarea')?.value || '',
+    };
+
+    try {
+      const res = await fetch('/api/booking', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (data.ok) {
+        button.textContent = 'Sent!';
+        button.style.background = '#7b5738';
+        setTimeout(() => {
+          button.textContent = originalText;
+          button.style.background = '';
+          button.disabled = false;
+          button.style.opacity = '1';
+          bookingForm.reset();
+        }, 3000);
+      } else {
+        throw new Error(data.detail || 'Failed to send');
+      }
+    } catch (err) {
+      button.textContent = 'Try Again';
+      button.style.background = '#b48860';
+      setTimeout(() => {
+        button.textContent = originalText;
+        button.style.background = '';
+        button.disabled = false;
+        button.style.opacity = '1';
+      }, 2000);
+    }
   });
 
   const cursorGlow = document.createElement('div');

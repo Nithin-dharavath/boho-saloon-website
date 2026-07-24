@@ -2,7 +2,21 @@
 
 {% block title %}Privacy Policy — Boho Bloom Luxury Salon{% endblock %}
 
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://bohobloomsalon.com/"},
+    {"@type": "ListItem", "position": 2, "name": "Privacy Policy", "item": "https://bohobloomsalon.com/privacy-policy"}
+  ]
+}
+</script>
+{% endblock %}
+
 {% block content %}
+<main id="main-content">
 <div class="page-glow"></div>
 
 <section class="policy-shell">
@@ -68,4 +82,5 @@
     <a href="/terms-conditions">Terms &amp; Conditions</a>
   </div>
 </footer>
+</main>
 {% endblock %}

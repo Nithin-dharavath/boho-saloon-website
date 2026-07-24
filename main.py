@@ -7,17 +7,18 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import uvicorn
 
-from datetime import date
+from datetime import date, datetime
 
 from app.auth import router as auth_router, get_current_user
 from app.automation import start_scheduler, stop_scheduler, check_birthday_offers
 from app.database import init_db, get_db
-from app.config import ADMIN_EMAILS, GOOGLE_SITE_VERIFICATION, GOOGLE_CLIENT_ID
+from app.config import ADMIN_EMAILS, GOOGLE_SITE_VERIFICATION, GOOGLE_CLIENT_ID, GA_MEASUREMENT_ID
 from app.models import ProfileUpdate
 from app.seo import INDEX_SEO, LOGIN_SEO, PROFILE_SETUP_SEO, ADMIN_LOGS_SEO, PRIVACY_SEO, TERMS_SEO, SERVICES_SEO
 from app.services_data import SERVICES
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
+logger = logging.getLogger(__name__)
 
 
 @asynccontextmanager
@@ -33,36 +34,37 @@ app = FastAPI(title="Boho-Bloom Luxury Salon", lifespan=lifespan)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 templates.env.globals["GOOGLE_CLIENT_ID"] = GOOGLE_CLIENT_ID
+templates.env.globals["GA_MEASUREMENT_ID"] = GA_MEASUREMENT_ID
 
 app.include_router(auth_router)
 
 
 @app.get("/sitemap.xml", response_class=PlainTextResponse)
 async def sitemap():
-    return """<?xml version="1.0" encoding="UTF-8"?>
+    today = datetime.utcnow().strftime("%Y-%m-%d")
+    return f"""<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://bohobloomsalon.com/</loc>
+    <lastmod>{today}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://bohobloomsalon.com/login</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-  </url>
-  <url>
     <loc>https://bohobloomsalon.com/services</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <lastmod>{today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://bohobloomsalon.com/privacy-policy</loc>
+    <lastmod>{today}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
     <loc>https://bohobloomsalon.com/terms-conditions</loc>
+    <lastmod>{today}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
@@ -88,6 +90,20 @@ async def index(request: Request):
     if GOOGLE_SITE_VERIFICATION:
         ctx["GOOGLE_SITE_VERIFICATION"] = GOOGLE_SITE_VERIFICATION
     return templates.TemplateResponse(request, "index.html", ctx)
+
+
+@app.exception_handler(404)
+async def not_found(request: Request, exc):
+    if "text/html" in request.headers.get("accept", ""):
+        return templates.TemplateResponse(request, "404.html", {"GOOGLE_SITE_VERIFICATION": GOOGLE_SITE_VERIFICATION if GOOGLE_SITE_VERIFICATION else None}, status_code=404)
+    return PlainTextResponse("Not Found", status_code=404)
+
+
+@app.exception_handler(500)
+async def server_error(request: Request, exc):
+    if "text/html" in request.headers.get("accept", ""):
+        return templates.TemplateResponse(request, "500.html", {"GOOGLE_SITE_VERIFICATION": GOOGLE_SITE_VERIFICATION if GOOGLE_SITE_VERIFICATION else None}, status_code=500)
+    return PlainTextResponse("Internal Server Error", status_code=500)
 
 
 @app.get("/services", response_class=HTMLResponse)
@@ -275,6 +291,24 @@ async def profile_update(request: Request):
         "date_of_birth": data.date_of_birth,
         "age": age,
     })
+
+
+@app.post("/api/booking")
+async def create_booking(request: Request):
+    try:
+        body = await request.json()
+        name = body.get("name", "").strip()
+        phone = body.get("phone", "").strip()
+        service = body.get("service", "").strip()
+        message = body.get("message", "").strip()
+        if not name or not phone:
+            raise HTTPException(status_code=400, detail="Name and phone are required")
+        logger.info(f"Booking enquiry: {name}, {phone}, {service}, {message}")
+        return {"ok": True, "message": "Booking enquiry received. We'll contact you shortly."}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 if __name__ == "__main__":

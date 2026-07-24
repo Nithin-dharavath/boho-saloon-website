@@ -2,7 +2,36 @@
 
 {% block title %}{{ seo.title }}{% endblock %}
 
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://bohobloomsalon.com/"},
+    {"@type": "ListItem", "position": 2, "name": "Services", "item": "https://bohobloomsalon.com/services"}
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Salon Services at Boho Bloom Luxury Salon",
+  "description": "Premium hair care, beauty, nail art, spa, and bridal services for women and men.",
+  "itemListElement": [
+    {"@type": "Service", "name": "Hair Care", "description": "Haircut, color, highlights, keratin, spa"},
+    {"@type": "Service", "name": "Beauty", "description": "Makeup, facials, lash extensions"},
+    {"@type": "Service", "name": "Nails", "description": "Manicure, pedicure, nail art, gel, acrylic"},
+    {"@type": "Service", "name": "Bridal", "description": "Bridal makeup, hair styling, packages"},
+    {"@type": "Service", "name": "Men's Grooming", "description": "Haircuts, beard grooming, skin care"}
+  ]
+}
+</script>
+{% endblock %}
+
 {% block content %}
+<main id="main-content">
 <div class="page-glow"></div>
 
 <section class="services-hero">
@@ -144,6 +173,7 @@
     <a href="/terms-conditions">Terms &amp; Conditions</a>
   </div>
 </footer>
+</main>
 {% endblock %}
 
 {% block scripts %}

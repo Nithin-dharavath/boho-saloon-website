@@ -22,3 +22,4 @@ TIMEZONE = os.getenv("TIMEZONE", "Asia/Kolkata")
 ADMIN_EMAILS = os.getenv("ADMIN_EMAILS", "").split(",") if os.getenv("ADMIN_EMAILS") else []
 GOOGLE_SITE_VERIFICATION = os.getenv("GOOGLE_SITE_VERIFICATION", "")
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "")
+GA_MEASUREMENT_ID = os.getenv("GA_MEASUREMENT_ID", "")

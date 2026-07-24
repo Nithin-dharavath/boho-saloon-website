@@ -148,7 +148,7 @@ async def verify_otp(body: OTPVerify, response: Response):
         httponly=True,
         samesite="lax",
         max_age=JWT_EXPIRY_HOURS * 3600,
-        secure=False,
+        secure=True,
         path="/",
     )
 
@@ -235,7 +235,7 @@ async def google_auth(body: dict, response: Response):
         httponly=True,
         samesite="lax",
         max_age=JWT_EXPIRY_HOURS * 3600,
-        secure=False,
+        secure=True,
         path="/",
     )
 
@@ -297,5 +297,5 @@ async def get_me(request: Request):
 
 @router.post("/logout")
 async def logout(response: Response):
-    response.delete_cookie("session", path="/", httponly=True, samesite="lax")
+    response.delete_cookie("session", path="/", httponly=True, samesite="lax", secure=True)
     return {"ok": True}
