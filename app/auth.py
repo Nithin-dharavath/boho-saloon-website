@@ -95,7 +95,7 @@ async def request_otp(body: OTPRequest):
 
 
 @router.post("/verify-otp")
-async def verify_otp(body: OTPVerify, response: Response):
+async def verify_otp(body: OTPVerify, request: Request, response: Response):
     email = body.email
     code = body.code
 
@@ -148,7 +148,7 @@ async def verify_otp(body: OTPVerify, response: Response):
         httponly=True,
         samesite="lax",
         max_age=JWT_EXPIRY_HOURS * 3600,
-        secure=True,
+        secure=request.url.scheme == "https",
         path="/",
     )
 
@@ -163,7 +163,7 @@ async def verify_otp(body: OTPVerify, response: Response):
 
 
 @router.post("/google")
-async def google_auth(body: dict, response: Response):
+async def google_auth(body: dict, request: Request, response: Response):
     credential = body.get("credential")
     if not credential:
         return {"ok": False, "error": "Missing credential"}
@@ -235,7 +235,7 @@ async def google_auth(body: dict, response: Response):
         httponly=True,
         samesite="lax",
         max_age=JWT_EXPIRY_HOURS * 3600,
-        secure=True,
+        secure=request.url.scheme == "https",
         path="/",
     )
 
@@ -296,6 +296,6 @@ async def get_me(request: Request):
 
 
 @router.post("/logout")
-async def logout(response: Response):
-    response.delete_cookie("session", path="/", httponly=True, samesite="lax", secure=True)
+async def logout(request: Request, response: Response):
+    response.delete_cookie("session", path="/", httponly=True, samesite="lax", secure=request.url.scheme == "https")
     return {"ok": True}

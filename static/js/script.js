@@ -6,6 +6,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const navbar = document.querySelector('.navbar');
   const toggle = document.querySelector('.navbar-toggle');
   const navLinks = document.querySelector('.navbar-links');
+  const drawerClose = document.querySelector('.navbar-drawer-close');
+  const drawerOverlay = document.querySelector('.navbar-drawer-overlay');
+  const mobileNavQuery = window.matchMedia('(max-width: 768px)');
+  let lastFocusedElement = null;
 
   window.addEventListener('scroll', () => {
     if (!navbar) return;
@@ -16,18 +20,82 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }, { passive: true });
 
+  const drawerFocusable = () => navLinks
+    ? Array.from(navLinks.querySelectorAll('a[href], button:not([disabled])'))
+    : [];
+
+  const openDrawer = () => {
+    if (!toggle || !navLinks || !mobileNavQuery.matches) return;
+    lastFocusedElement = document.activeElement;
+    toggle.classList.add('active');
+    navLinks.classList.add('active');
+    drawerOverlay?.classList.add('active');
+    toggle.setAttribute('aria-expanded', 'true');
+    toggle.setAttribute('aria-label', 'Close navigation menu');
+    document.body.classList.add('mobile-nav-open');
+    requestAnimationFrame(() => drawerClose?.focus());
+  };
+
+  const closeDrawer = ({ restoreFocus = true } = {}) => {
+    if (!toggle || !navLinks) return;
+    const wasOpen = navLinks.classList.contains('active');
+    toggle.classList.remove('active');
+    navLinks.classList.remove('active');
+    drawerOverlay?.classList.remove('active');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', mobileNavQuery.matches ? 'Open navigation menu' : 'Toggle menu');
+    document.body.classList.remove('mobile-nav-open');
+    document.body.style.overflow = '';
+    if (wasOpen && restoreFocus) {
+      requestAnimationFrame(() => (lastFocusedElement || toggle).focus());
+    }
+  };
+
   toggle?.addEventListener('click', () => {
-    const isActive = toggle.classList.toggle('active');
-    navLinks?.classList.toggle('active', isActive);
-    toggle.setAttribute('aria-expanded', String(isActive));
-    document.body.style.overflow = isActive ? 'hidden' : '';
+    if (!mobileNavQuery.matches) {
+      const isActive = toggle.classList.toggle('active');
+      navLinks?.classList.toggle('active', isActive);
+      toggle.setAttribute('aria-expanded', String(isActive));
+      document.body.style.overflow = isActive ? 'hidden' : '';
+      return;
+    }
+    if (navLinks?.classList.contains('active')) {
+      closeDrawer();
+    } else {
+      openDrawer();
+    }
+  });
+
+  drawerClose?.addEventListener('click', () => closeDrawer());
+  drawerOverlay?.addEventListener('click', () => closeDrawer());
+
+  document.addEventListener('keydown', (event) => {
+    if (!mobileNavQuery.matches || !navLinks?.classList.contains('active')) return;
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      closeDrawer();
+      return;
+    }
+    if (event.key !== 'Tab') return;
+    const focusable = drawerFocusable();
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  });
+
+  mobileNavQuery.addEventListener('change', (event) => {
+    if (!event.matches) closeDrawer({ restoreFocus: false });
   });
 
   const closeAllOverlays = () => {
-    toggle?.classList.remove('active');
-    navLinks?.classList.remove('active');
-    toggle?.setAttribute('aria-expanded', 'false');
-    document.body.style.overflow = '';
+    closeDrawer({ restoreFocus: false });
     document.querySelectorAll('.overlay.active, .modal.active, [data-open="true"]').forEach((el) => {
       el.classList.remove('active');
       el.removeAttribute('data-open');

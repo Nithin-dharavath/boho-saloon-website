@@ -8,7 +8,19 @@
       <span>Luxury Salon</span>
     </span>
   </a>
-  <ul class="navbar-links">
+  <ul class="navbar-links" id="mobile-navigation">
+    <li class="mobile-drawer-header">
+      <div class="mobile-drawer-brand" aria-label="Boho Bloom Luxury Salon">
+        <span class="brand-mark">
+          <img src="{{ url_for('static', path='images/boho-bloom-monogram.png') }}?v=3" alt="">
+        </span>
+        <span class="brand-copy">
+          <strong>Boho Bloom</strong>
+          <span>Luxury Salon</span>
+        </span>
+      </div>
+      <button class="navbar-drawer-close" type="button" aria-label="Close navigation menu">&times;</button>
+    </li>
     <li><a href="/" class="{{ 'navbar-link-active' if active == 'home' else '' }}">Home</a></li>
     <li><a href="/#about" class="{{ 'navbar-link-active' if active == 'about' else '' }}">About Us</a></li>
     <li><a href="/services" class="{{ 'navbar-link-active' if active == 'services' else '' }}">Services</a></li>
@@ -19,9 +31,10 @@
       <li><a href="/login" class="navbar-signin">Sign In</a></li>
     {% endif %}
   </ul>
-  <button class="navbar-toggle" aria-label="Toggle menu">
+  <button class="navbar-toggle" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-navigation">
     <span></span>
     <span></span>
     <span></span>
   </button>
+  <button class="navbar-drawer-overlay" type="button" aria-label="Close navigation menu" tabindex="-1"></button>
 </nav>
