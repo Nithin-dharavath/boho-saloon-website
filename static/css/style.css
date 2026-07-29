@@ -458,7 +458,10 @@ p {
   max-width: 290px;
   padding: 18px 22px;
   border-radius: 18px;
-  background: rgba(255, 248, 241, 0.92);
+  background: linear-gradient(135deg, rgba(255, 250, 245, 0.985), rgba(255, 246, 237, 0.97));
+  border: 1px solid rgba(255, 255, 255, 0.82);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
   color: var(--cocoa);
   box-shadow: var(--shadow-soft);
 }
@@ -471,6 +474,10 @@ p {
   color: var(--espresso);
 }
 
+.hero-note p {
+  color: rgba(75, 47, 31, 0.86);
+}
+
 .hero-aside {
   display: flex;
   flex-direction: column;
@@ -478,8 +485,7 @@ p {
   gap: 20px;
 }
 
-.stat-bubble,
-.highlight-card {
+.stat-bubble {
   background: var(--white);
   border-radius: 26px;
   box-shadow: 0 14px 40px rgba(40, 22, 15, 0.18);
@@ -504,13 +510,25 @@ p {
   border-radius: 50%;
   border: 3px solid rgba(255, 248, 241, 0.94);
   background:
-    linear-gradient(135deg, rgba(212, 177, 142, 0.65), rgba(91, 53, 29, 0.45)),
-    url('/static/images/makeup-tools.jpg') center / cover no-repeat;
+    linear-gradient(135deg, rgba(212, 177, 142, 0.18), rgba(91, 53, 29, 0.16)),
+    url('/static/images/client-avatar-hairstyle.png') center / cover no-repeat;
   margin-left: -10px;
 }
 
 .stat-avatars span:first-child {
   margin-left: 0;
+}
+
+.stat-avatars span:nth-child(2) {
+  background:
+    linear-gradient(135deg, rgba(212, 177, 142, 0.18), rgba(91, 53, 29, 0.16)),
+    url('/static/images/client-avatar-makeup.png') center / cover no-repeat;
+}
+
+.stat-avatars span:nth-child(3) {
+  background:
+    linear-gradient(135deg, rgba(212, 177, 142, 0.18), rgba(91, 53, 29, 0.16)),
+    url('/static/images/client-avatar-beauty.png') center / cover no-repeat;
 }
 
 .stat-bubble strong {
@@ -524,47 +542,6 @@ p {
 .stat-bubble p {
   font-size: 0.75rem;
   color: rgba(75, 47, 31, 0.68);
-}
-
-.highlight-card {
-  display: grid;
-  grid-template-columns: 130px 1fr;
-  gap: 14px;
-  padding: 12px;
-  width: min(360px, 100%);
-}
-
-.highlight-image {
-  border-radius: 18px;
-  min-height: 110px;
-  background:
-    linear-gradient(135deg, rgba(212, 177, 142, 0.16), rgba(255, 255, 255, 0.08)),
-    url('/static/images/katherine.jpg') center / cover no-repeat;
-}
-
-.highlight-copy {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.highlight-copy h2 {
-  font-size: 1.8rem;
-  color: var(--cocoa);
-  margin-bottom: 8px;
-}
-
-.highlight-copy p {
-  font-size: 0.82rem;
-  color: rgba(75, 47, 31, 0.7);
-  margin-bottom: 10px;
-}
-
-.highlight-copy a {
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: var(--mocha);
-  text-decoration: none;
 }
 
 .benefit-strip {
@@ -1091,14 +1068,9 @@ contact-copy p:not(.eyebrow) {
   }
 
   .stat-bubble,
-  .highlight-card,
   .contact-card,
   .booking-form {
     border-radius: 22px;
-  }
-
-  .highlight-card {
-    grid-template-columns: 1fr;
   }
 
   .editorial-stack {
