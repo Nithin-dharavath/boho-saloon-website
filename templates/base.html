@@ -74,8 +74,9 @@
     });
     var btn = document.getElementById('google-signin-btn');
     if (btn) {
+      var buttonWidth = Math.max(240, Math.min(400, Math.floor(btn.getBoundingClientRect().width || window.innerWidth - 40)));
       google.accounts.id.renderButton(btn, {
-        theme: 'outline', size: 'large', text: 'continue_with', width: 350,
+        theme: 'outline', size: 'large', text: 'continue_with', width: buttonWidth,
       });
     }
     google.accounts.id.prompt();

@@ -1310,7 +1310,7 @@ contact-copy p:not(.eyebrow) {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 32px 20px;
+  padding: clamp(24px, 3vw, 34px) 20px;
 }
 
 .auth-logo {
@@ -1319,7 +1319,7 @@ contact-copy p:not(.eyebrow) {
   gap: 12px;
   text-decoration: none;
   color: var(--cocoa);
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 }
 
 .auth-logo .brand-mark {
@@ -1330,29 +1330,30 @@ contact-copy p:not(.eyebrow) {
 
 .auth-card {
   width: 100%;
-  max-width: 420px;
-  padding: 40px 36px;
-  border-radius: var(--radius-xl);
+  max-width: 436px;
+  padding: clamp(32px, 3.8vw, 40px) clamp(28px, 3.5vw, 36px);
+  border-radius: 32px;
   background: rgba(255, 255, 255, 0.92);
   border: 1px solid rgba(75, 47, 31, 0.08);
   box-shadow: var(--shadow);
 }
 
 .auth-card h2 {
-  font-size: 1.8rem;
-  margin-bottom: 10px;
+  font-size: clamp(1.7rem, 2.2vw, 2.15rem);
+  margin-bottom: 12px;
+  line-height: 0.98;
 }
 
 .auth-desc {
-  font-size: 0.88rem;
+  font-size: clamp(0.84rem, 1.35vw, 0.92rem);
   color: rgba(75, 47, 31, 0.68);
-  margin-bottom: 28px;
+  margin-bottom: 22px;
 }
 
 .auth-card label {
   display: grid;
   gap: 8px;
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 }
 
 .auth-card label span {
@@ -1366,8 +1367,8 @@ contact-copy p:not(.eyebrow) {
 .auth-card input {
   width: 100%;
   border: 1px solid rgba(75, 47, 31, 0.14);
-  border-radius: 18px;
-  padding: 14px 16px;
+  border-radius: 16px;
+  padding: 13px 16px;
   font: inherit;
   font-size: 1rem;
   color: var(--cocoa);
@@ -1383,6 +1384,17 @@ contact-copy p:not(.eyebrow) {
 
 .auth-card .btn-dark {
   margin-top: 6px;
+}
+
+#google-signin-btn {
+  width: 100%;
+  margin: 0 0 18px;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+#google-signin-btn > div {
+  width: 100% !important;
 }
 
 .auth-error {
@@ -1406,6 +1418,79 @@ contact-copy p:not(.eyebrow) {
   color: var(--mocha);
   text-decoration: none;
   font-weight: 600;
+}
+
+@media (max-width: 680px) {
+  .auth-shell {
+    justify-content: flex-start;
+    padding: 14px 14px 28px;
+  }
+
+  .auth-logo {
+    margin-bottom: 16px;
+  }
+
+  .auth-logo .brand-mark {
+    width: 42px;
+    height: 42px;
+  }
+
+  .auth-logo .brand-copy strong {
+    font-size: 0.98rem;
+  }
+
+  .auth-logo .brand-copy span {
+    font-size: 0.76rem;
+  }
+
+  .auth-card {
+    max-width: 100%;
+    padding: 24px 18px 22px;
+    border-radius: 24px;
+  }
+
+  .auth-card h2 {
+    font-size: clamp(1.5rem, 7.2vw, 1.95rem);
+    margin-bottom: 10px;
+  }
+
+  .auth-desc {
+    margin-bottom: 18px;
+  }
+
+  .auth-card label {
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+
+  .auth-card label span {
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+  }
+
+  .auth-card input,
+  .auth-card textarea {
+    border-radius: 14px;
+    padding: 12px 14px;
+    font-size: 0.98rem;
+  }
+
+  #google-signin-btn {
+    margin-bottom: 16px;
+  }
+
+  .auth-card .btn-dark,
+  #google-signin-btn {
+    min-height: 48px;
+  }
+
+  .auth-back {
+    margin-top: 16px;
+  }
+
+  .auth-step.hidden {
+    display: none;
+  }
 }
 
 .auth-back a:hover {
