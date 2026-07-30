@@ -27,6 +27,7 @@
     <li><a href="/#contact" class="navbar-cta">Book Visit</a></li>
     {% if user and user.id %}
       <li><a href="/profile" class="navbar-user">{{ user.name or "Account" }}</a></li>
+      <li><a href="#" class="navbar-signout" id="navbar-signout-btn">Sign Out</a></li>
     {% else %}
       <li><a href="/login" class="navbar-signin">Sign In</a></li>
     {% endif %}
@@ -38,3 +39,16 @@
   </button>
   <button class="navbar-drawer-overlay" type="button" aria-label="Close navigation menu" tabindex="-1"></button>
 </nav>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var btn = document.getElementById('navbar-signout-btn');
+  if (btn) {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      fetch('/auth/logout', { method: 'POST' }).then(function(r) {
+        if (r.ok) window.location.href = '/';
+      });
+    });
+  }
+});
+</script>

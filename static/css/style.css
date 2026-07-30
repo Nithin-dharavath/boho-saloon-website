@@ -1524,6 +1524,11 @@ contact-copy p:not(.eyebrow) {
   white-space: nowrap;
 }
 
+.navbar-signout {
+  color: var(--mocha) !important;
+  font-weight: 600;
+}
+
 /* ── Policy / Legal Pages ──────────────────────── */
 
 .policy-shell {
@@ -2299,6 +2304,14 @@ contact-copy p:not(.eyebrow) {
   .navbar-links .navbar-user {
     max-width: 100%;
     text-align: left;
+  }
+
+  .navbar-links .navbar-signout {
+    justify-content: center;
+    margin-top: auto;
+    color: var(--mocha);
+    text-align: center;
+    background: rgba(75, 47, 31, 0.06);
   }
 }
 
