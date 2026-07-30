@@ -5,19 +5,39 @@
 {% block content %}
 <div class="page-glow"></div>
 <div class="auth-shell">
-  <a href="/" class="auth-logo">
-    <span class="brand-mark">B</span>
-    <span class="brand-copy">
-      <strong>Boho Bloom</strong>
-      <span>Luxury Salon</span>
-    </span>
-  </a>
+  <section class="auth-brand-panel" aria-label="Boho Bloom introduction">
+    <div class="auth-brand-wash"></div>
+    <div class="auth-orbit auth-orbit-one"></div>
+    <div class="auth-orbit auth-orbit-two"></div>
+    <div class="auth-brand-pattern" aria-hidden="true"></div>
+    <div class="auth-brand-content">
+      <a href="/" class="auth-logo">
+        <span class="brand-mark">B</span>
+        <span class="brand-copy">
+          <strong>Boho Bloom</strong>
+          <span>Luxury Salon</span>
+        </span>
+      </a>
+      <div class="auth-brand-copy">
+        <p class="auth-brand-kicker">Your ritual of radiance</p>
+        <h1>Come back to<br><em>your glow.</em></h1>
+        <p>Step into a slower, softer kind of luxury. Your next beautiful moment begins here.</p>
+      </div>
+      <div class="auth-brand-footer">
+        <span class="auth-brand-line"></span>
+        <span>Beauty, thoughtfully reimagined</span>
+      </div>
+    </div>
+  </section>
 
   <div class="auth-card" id="auth-card">
     <div class="auth-step" id="step-email">
-      <p class="eyebrow">Welcome</p>
-      <h2>Sign in to your account</h2>
-      <p class="auth-desc">Enter your email address and we'll send you a one-time code.</p>
+      <p class="eyebrow">Welcome back</p>
+      <h2>Make space for yourself.</h2>
+      <p class="auth-desc">Enter your details and we'll send you a one-time code to continue.</p>
+
+      <!-- Google Sign-In Button (rendered by GIS) -->
+      <div id="google-signin-btn"></div>
 
       <form id="email-form" autocomplete="off">
         <div class="form-group">
@@ -72,9 +92,6 @@
           Send Code
         </button>
       </form>
-      
-      <!-- Google Sign-In Button (rendered by GIS) -->
-      <div id="google-signin-btn"></div>
     </div>
 
     <div class="auth-step hidden" id="step-otp">
