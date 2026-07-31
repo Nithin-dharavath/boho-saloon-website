@@ -28,6 +28,105 @@
   ]
 }
 </script>
+<style>
+/* CSS for services grid and combo slider */
+.services-grid-3col {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+@media (max-width: 600px) {
+  .services-grid-3col {
+    grid-template-columns: 1fr;
+  }
+  .combo-group {
+    width: 100%;
+    margin-bottom: 2rem;
+  }
+}
+.combo-slider {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 20px;
+  padding-bottom: 20px;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+}
+.combo-slider::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+.combo-slider .combo-card {
+  flex: 0 0 auto;
+  width: calc(25% - 15px); /* 4 items per view */
+  scroll-snap-align: start;
+  margin-bottom: 0;
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+}
+.combo-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+}
+
+@media (max-width: 768px) {
+  .combo-group {
+    margin-top: 32px;
+  }
+
+  .combo-slider {
+    gap: 14px;
+    padding: 0 16px 18px;
+    margin: 0 -16px;
+    scroll-padding-inline: 16px;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    align-items: stretch;
+  }
+
+  .combo-slider .combo-card {
+    flex: 0 0 clamp(280px, 86vw, 360px);
+    width: clamp(280px, 86vw, 360px);
+    min-width: 280px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .combo-card-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .combo-card-top h4 {
+    line-height: 1.18;
+    text-wrap: balance;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .combo-price {
+    white-space: nowrap;
+    flex: 0 0 auto;
+  }
+
+  .combo-services {
+    gap: 8px;
+    align-content: flex-start;
+  }
+
+  .combo-services li {
+    padding: 6px 12px;
+    line-height: 1.2;
+  }
+}
+</style>
 {% endblock %}
 
 {% block content %}
@@ -63,8 +162,9 @@
     <h2>Women's Services</h2>
     <p>Discover a full spectrum of hair, beauty, nail, and bridal offerings shaped to your style.</p>
   </div>
-  <div class="services-list">
+  <div class="services-grid-3col">
     {% for key, category in services_data.services.women.items() %}
+      {% if loop.index0 < 3 %}
     <article class="service-card reveal">
       <div class="service-card-header">
         <h3>{{ category.title }}</h3>
@@ -76,6 +176,7 @@
         {% endfor %}
       </ul>
     </article>
+      {% endif %}
     {% endfor %}
   </div>
 </section>
@@ -86,8 +187,9 @@
     <h2>Men's Grooming</h2>
     <p>Sharp cuts, precise beard work, revitalising treatments — grooming that goes beyond the basics.</p>
   </div>
-  <div class="services-list">
+  <div class="services-grid-3col">
     {% for key, category in services_data.services.men.items() %}
+      {% if loop.index0 < 3 %}
     <article class="service-card reveal">
       <div class="service-card-header">
         <h3>{{ category.title }}</h3>
@@ -99,6 +201,7 @@
         {% endfor %}
       </ul>
     </article>
+      {% endif %}
     {% endfor %}
   </div>
 </section>
@@ -112,17 +215,14 @@
 
   <div class="combo-group reveal">
     <h3 class="combo-group-title">Women's Combos</h3>
-    <div class="combo-grid">
+    <div class="combo-slider">
       {% for offer in services_data.combo_offers.women %}
       <div class="combo-card">
         <div class="combo-card-top">
-          <h4>{{ offer.name }}</h4>
-          <span class="combo-price"><span class="combo-rupee">&#8377;</span> {{ offer.price }}</span>
+          <h4>{{ offer.name }}</h4><span class="combo-price"><span class="combo-rupee">&#8377;</span> {{ offer.price }}</span>
         </div>
         <ul class="combo-services">
-          {% for s in offer.services %}
-          <li>{{ s }}</li>
-          {% endfor %}
+          {% for s in offer.services %}<li>{{ s }}</li>{% endfor %}
         </ul>
       </div>
       {% endfor %}
@@ -131,17 +231,14 @@
 
   <div class="combo-group reveal">
     <h3 class="combo-group-title">Men's Combos</h3>
-    <div class="combo-grid">
+    <div class="combo-slider">
       {% for offer in services_data.combo_offers.men %}
       <div class="combo-card">
         <div class="combo-card-top">
-          <h4>{{ offer.name }}</h4>
-          <span class="combo-price"><span class="combo-rupee">&#8377;</span> {{ offer.price }}</span>
+          <h4>{{ offer.name }}</h4><span class="combo-price"><span class="combo-rupee">&#8377;</span> {{ offer.price }}</span>
         </div>
         <ul class="combo-services">
-          {% for s in offer.services %}
-          <li>{{ s }}</li>
-          {% endfor %}
+          {% for s in offer.services %}<li>{{ s }}</li>{% endfor %}
         </ul>
       </div>
       {% endfor %}
