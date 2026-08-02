@@ -1,9 +1,14 @@
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, date, timedelta
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
-from app.config import BIRTHDAY_DAYS_BEFORE, BIRTHDAY_DISCOUNT, BIRTHDAY_OFFER_EXPIRY_DAYS, TIMEZONE
+from app.config import (
+    BIRTHDAY_DAYS_BEFORE,
+    BIRTHDAY_DISCOUNT,
+    BIRTHDAY_OFFER_EXPIRY_DAYS,
+    TIMEZONE,
+)
 from app.database import get_db
 from app.email_service import send_template_email
 
@@ -33,11 +38,20 @@ def stop_scheduler():
         logger.info("APScheduler stopped")
 
 
+def _md(value) -> str:
+    """Coerce a date/str to a `MM-DD` string for birthday window comparison."""
+    if isinstance(value, date) and not isinstance(value, datetime):
+        return value.strftime("%m-%d")
+    if isinstance(value, datetime):
+        return value.strftime("%m-%d")
+    return datetime.strptime(str(value), "%Y-%m-%d").strftime("%m-%d")
+
+
 async def check_birthday_offers():
     db = get_db()
     try:
         users = db.execute(
-            """SELECT id, email, name, date_of_birth FROM users
+            """SELECT id, email, name, date_of_birth FROM profiles
                WHERE date_of_birth IS NOT NULL AND name IS NOT NULL""",
         ).fetchall()
 
@@ -48,7 +62,7 @@ async def check_birthday_offers():
 
         sent_count = 0
         for user in users:
-            dob_md = datetime.strptime(user["date_of_birth"], "%Y-%m-%d").strftime("%m-%d")
+            dob_md = _md(user["date_of_birth"])
 
             if today_md <= dob_md <= window_end_md:
                 year = today.year

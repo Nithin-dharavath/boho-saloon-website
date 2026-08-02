@@ -174,7 +174,7 @@ async def view_automation_logs(request: Request, email_type: str = ""):
     try:
         if email_type:
             rows = db.execute(
-                "SELECT * FROM automation_logs WHERE email_type = ? ORDER BY sent_at DESC LIMIT 100",
+                "SELECT * FROM automation_logs WHERE email_type = %s ORDER BY sent_at DESC LIMIT 100",
                 (email_type,),
             ).fetchall()
         else:
@@ -201,10 +201,11 @@ DEMO_BOOKINGS = [
 ]
 
 
-def compute_age(dob_str: str | None) -> int | None:
-    if not dob_str:
+def compute_age(dob) -> int | None:
+    if not dob:
         return None
-    dob = date.fromisoformat(dob_str)
+    if isinstance(dob, str):
+        dob = date.fromisoformat(dob)
     today = date.today()
     return today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day))
 
@@ -217,7 +218,7 @@ async def profile_page(request: Request):
 
     db = get_db()
     user = db.execute(
-        "SELECT id, email, name, date_of_birth, created_at FROM users WHERE id = ?",
+        "SELECT id, email, name, date_of_birth, created_at FROM profiles WHERE id = %s",
         (current_user["id"],),
     ).fetchone()
     db.close()
@@ -226,7 +227,8 @@ async def profile_page(request: Request):
         return RedirectResponse(url="/login")
 
     age = compute_age(user["date_of_birth"])
-    member_id = f"BB-{user['id']:06d}"
+    raw_id = str(user["id"]).split("-")[0]
+    member_id = f"BB-{raw_id[:6].upper()}"
 
     raw_name = (user["name"] or "").strip()
     if raw_name:
@@ -244,10 +246,10 @@ async def profile_page(request: Request):
             "id": user["id"],
             "email": user["email"],
             "name": user["name"],
-            "date_of_birth": user["date_of_birth"],
+            "date_of_birth": user["date_of_birth"].isoformat() if user["date_of_birth"] else None,
             "age": age,
             "member_id": member_id,
-            "created_at": user["created_at"],
+            "created_at": user["created_at"].isoformat() if user["created_at"] else None,
             "initials": initials,
         },
         "bookings": DEMO_BOOKINGS,
@@ -278,7 +280,7 @@ async def profile_update(request: Request):
 
     db = get_db()
     db.execute(
-        "UPDATE users SET name = ?, date_of_birth = ? WHERE id = ?",
+        "UPDATE profiles SET name = %s, date_of_birth = %s WHERE id = %s",
         (data.name.strip(), data.date_of_birth, current_user["id"]),
     )
     db.commit()

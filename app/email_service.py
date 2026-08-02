@@ -2,7 +2,6 @@ import logging
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from datetime import datetime
 
 from jinja2 import Environment, FileSystemLoader
 
@@ -20,12 +19,12 @@ def send_template_email(
     template_name: str,
     context: dict,
     idempotency_key: str,
-    user_id: int = None,
+    user_id: str | None = None,
 ) -> bool:
     db = get_db()
     try:
         existing = db.execute(
-            "SELECT id FROM automation_logs WHERE idempotency_key = ?",
+            "SELECT id FROM automation_logs WHERE idempotency_key = %s",
             (idempotency_key,),
         ).fetchone()
         if existing:
@@ -58,7 +57,7 @@ def send_template_email(
         db.execute(
             """INSERT INTO automation_logs
                (user_id, email_type, recipient, status, idempotency_key)
-               VALUES (?, ?, ?, 'sent', ?)""",
+               VALUES (%s, %s, %s, 'sent', %s)""",
             (user_id, context.get("email_type", "generic"), to_email, idempotency_key),
         )
         db.commit()
@@ -69,8 +68,14 @@ def send_template_email(
         db.execute(
             """INSERT INTO automation_logs
                (user_id, email_type, recipient, status, error, idempotency_key)
-               VALUES (?, ?, ?, 'failed', ?, ?)""",
-            (user_id, context.get("email_type", "generic"), to_email, "Gmail auth failed", idempotency_key),
+               VALUES (%s, %s, %s, 'failed', %s, %s)""",
+            (
+                user_id,
+                context.get("email_type", "generic"),
+                to_email,
+                "Gmail auth failed",
+                idempotency_key,
+            ),
         )
         db.commit()
         return False
@@ -79,8 +84,14 @@ def send_template_email(
         db.execute(
             """INSERT INTO automation_logs
                (user_id, email_type, recipient, status, error, idempotency_key)
-               VALUES (?, ?, ?, 'failed', ?, ?)""",
-            (user_id, context.get("email_type", "generic"), to_email, str(e), idempotency_key),
+               VALUES (%s, %s, %s, 'failed', %s, %s)""",
+            (
+                user_id,
+                context.get("email_type", "generic"),
+                to_email,
+                str(e),
+                idempotency_key,
+            ),
         )
         db.commit()
         return False

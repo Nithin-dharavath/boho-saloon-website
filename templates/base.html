@@ -91,15 +91,13 @@
       const res = await fetch('/auth/google', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
         body: JSON.stringify({ credential: response.credential }),
       });
       const data = await res.json();
       if (data.ok) {
-        if (data.needs_profile) {
-          window.location.href = '/profile/setup';
-        } else {
-          window.location.href = window.location.pathname;
-        }
+        const nextUrl = data.redirect_url || (data.needs_profile ? '/profile/setup' : '/');
+        (window.top || window).location.replace(nextUrl);
       } else {
         console.error('Google sign-in error:', data.error);
       }

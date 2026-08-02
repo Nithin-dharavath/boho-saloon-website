@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 
-def create_jwt(user_id: int, email: str) -> str:
+def create_jwt(user_id: str, email: str) -> str:
     payload = {
         "sub": str(user_id),
         "email": email,
@@ -54,7 +54,7 @@ def get_current_user(request: Request):
     payload = decode_jwt(token)
     if not payload:
         return None
-    return {"id": int(payload["sub"]), "email": payload["email"]}
+    return {"id": payload["sub"], "email": payload["email"]}
 
 
 @router.post("/request-otp")
@@ -63,12 +63,12 @@ async def request_otp(body: OTPRequest):
 
     db = get_db()
 
-    db.execute("DELETE FROM otp_codes WHERE expires_at <= ?", (datetime.utcnow(),))
+    db.execute("DELETE FROM otp_codes WHERE expires_at <= %s", (datetime.utcnow(),))
     db.commit()
 
     recent_otp = db.execute(
         """SELECT COUNT(*) as cnt FROM otp_codes
-           WHERE email = ? AND created_at > ?""",
+           WHERE email = %s AND created_at > %s""",
         (email, datetime.utcnow() - timedelta(seconds=OTP_RATE_LIMIT_SECONDS)),
     ).fetchone()
 
@@ -80,7 +80,7 @@ async def request_otp(body: OTPRequest):
     code_hash = hashlib.sha256(code.encode()).hexdigest()
 
     db.execute(
-        "INSERT INTO otp_codes (email, code, expires_at) VALUES (?, ?, ?)",
+        "INSERT INTO otp_codes (email, code, expires_at) VALUES (%s, %s, %s)",
         (email, code_hash, datetime.utcnow() + timedelta(minutes=OTP_EXPIRY_MINUTES)),
     )
     db.commit()
@@ -103,7 +103,7 @@ async def verify_otp(body: OTPVerify, request: Request, response: Response):
 
     otp = db.execute(
         """SELECT id, code, attempts FROM otp_codes
-           WHERE email = ? AND used = 0 AND expires_at > ?
+           WHERE email = %s AND used = 0 AND expires_at > %s
            ORDER BY created_at DESC LIMIT 1""",
         (email, datetime.utcnow()),
     ).fetchone()
@@ -113,14 +113,17 @@ async def verify_otp(body: OTPVerify, request: Request, response: Response):
         return {"ok": False, "error": "No valid code found. Request a new one."}
 
     if otp["attempts"] >= OTP_MAX_ATTEMPTS:
-        db.execute("UPDATE otp_codes SET used = 1 WHERE id = ?", (otp["id"],))
+        db.execute("UPDATE otp_codes SET used = 1 WHERE id = %s", (otp["id"],))
         db.commit()
         db.close()
         return {"ok": False, "error": "Too many incorrect attempts. Request a new code."}
 
     code_hash = hashlib.sha256(code.encode()).hexdigest()
     if code_hash != otp["code"]:
-        db.execute("UPDATE otp_codes SET attempts = attempts + 1 WHERE id = ?", (otp["id"],))
+        db.execute(
+            "UPDATE otp_codes SET attempts = attempts + 1 WHERE id = %s",
+            (otp["id"],),
+        )
         db.commit()
         remaining = OTP_MAX_ATTEMPTS - otp["attempts"] - 1
         db.close()
@@ -128,14 +131,20 @@ async def verify_otp(body: OTPVerify, request: Request, response: Response):
             return {"ok": False, "error": "Too many incorrect attempts. Request a new code."}
         return {"ok": False, "error": f"Incorrect code. {remaining} attempt(s) remaining."}
 
-    db.execute("UPDATE otp_codes SET used = 1 WHERE id = ?", (otp["id"],))
+    db.execute("UPDATE otp_codes SET used = 1 WHERE id = %s", (otp["id"],))
 
-    user = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
+    user = db.execute(
+        "SELECT id, email, name FROM profiles WHERE email = %s",
+        (email,),
+    ).fetchone()
     is_new = False
     if not user:
-        db.execute("INSERT INTO users (email) VALUES (?)", (email,))
+        db.execute(
+            "INSERT INTO profiles (email) VALUES (%s) RETURNING id, email, name",
+            (email,),
+        )
+        user = db.fetchone()
         db.commit()
-        user = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
         is_new = True
 
     db.close()
@@ -153,11 +162,13 @@ async def verify_otp(body: OTPVerify, request: Request, response: Response):
     )
 
     needs_profile = is_new or not user["name"]
+    redirect_url = "/profile/setup" if needs_profile else "/"
 
     return {
         "ok": True,
         "is_new": is_new,
         "needs_profile": needs_profile,
+        "redirect_url": redirect_url,
         "user": {"id": user["id"], "email": user["email"], "name": user["name"]},
     }
 
@@ -189,16 +200,18 @@ async def google_auth(body: dict, request: Request, response: Response):
     db = get_db()
 
     user = db.execute(
-        "SELECT * FROM users WHERE google_sub = ?", (google_sub,)
+        "SELECT id, email, name, google_sub FROM profiles WHERE google_sub = %s",
+        (google_sub,),
     ).fetchone()
 
     if not user:
         user = db.execute(
-            "SELECT * FROM users WHERE email = ?", (email,)
+            "SELECT id, email, name, google_sub FROM profiles WHERE email = %s",
+            (email,),
         ).fetchone()
         if user:
             db.execute(
-                "UPDATE users SET google_sub = ? WHERE id = ?",
+                "UPDATE profiles SET google_sub = %s WHERE id = %s",
                 (google_sub, user["id"]),
             )
             db.commit()
@@ -206,23 +219,23 @@ async def google_auth(body: dict, request: Request, response: Response):
     is_new = False
     if not user:
         db.execute(
-            "INSERT INTO users (email, name, google_sub) VALUES (?, ?, ?)",
+            """INSERT INTO profiles (email, name, google_sub)
+               VALUES (%s, %s, %s) RETURNING id, email, name, google_sub""",
             (email, google_name or None, google_sub),
         )
+        user = db.fetchone()
         db.commit()
-        user = db.execute(
-            "SELECT * FROM users WHERE google_sub = ?", (google_sub,)
-        ).fetchone()
         is_new = True
 
     if user and google_name and not user["name"]:
         db.execute(
-            "UPDATE users SET name = ? WHERE id = ?",
+            "UPDATE profiles SET name = %s WHERE id = %s",
             (google_name, user["id"]),
         )
         db.commit()
         user = db.execute(
-            "SELECT * FROM users WHERE id = ?", (user["id"],)
+            "SELECT id, email, name, google_sub FROM profiles WHERE id = %s",
+            (user["id"],),
         ).fetchone()
 
     db.close()
@@ -240,11 +253,13 @@ async def google_auth(body: dict, request: Request, response: Response):
     )
 
     needs_profile = not user["name"]
+    redirect_url = "/profile/setup" if needs_profile else "/"
 
     return {
         "ok": True,
         "is_new": is_new,
         "needs_profile": needs_profile,
+        "redirect_url": redirect_url,
         "user": {"id": user["id"], "email": user["email"], "name": user["name"]},
     }
 
@@ -257,7 +272,7 @@ async def profile_setup(body: ProfileSetup, request: Request):
 
     db = get_db()
     db.execute(
-        "UPDATE users SET name = ?, date_of_birth = ? WHERE id = ?",
+        "UPDATE profiles SET name = %s, date_of_birth = %s WHERE id = %s",
         (body.name.strip(), body.date_of_birth, current_user["id"]),
     )
     db.commit()
@@ -274,7 +289,8 @@ async def get_me(request: Request):
 
     db = get_db()
     user = db.execute(
-        "SELECT id, email, name, date_of_birth, created_at FROM users WHERE id = ?",
+        """SELECT id, email, name, date_of_birth, created_at
+           FROM profiles WHERE id = %s""",
         (current_user["id"],),
     ).fetchone()
     db.close()
@@ -282,6 +298,7 @@ async def get_me(request: Request):
     if not user:
         return {"ok": True, "authenticated": False}
 
+    dob = user["date_of_birth"]
     return {
         "ok": True,
         "authenticated": True,
@@ -289,13 +306,19 @@ async def get_me(request: Request):
             "id": user["id"],
             "email": user["email"],
             "name": user["name"],
-            "date_of_birth": user["date_of_birth"],
-            "created_at": user["created_at"],
+            "date_of_birth": dob.isoformat() if dob else None,
+            "created_at": user["created_at"].isoformat() if user["created_at"] else None,
         },
     }
 
 
 @router.post("/logout")
 async def logout(request: Request, response: Response):
-    response.delete_cookie("session", path="/", httponly=True, samesite="lax", secure=request.url.scheme == "https")
+    response.delete_cookie(
+        "session",
+        path="/",
+        httponly=True,
+        samesite="lax",
+        secure=request.url.scheme == "https",
+    )
     return {"ok": True}
